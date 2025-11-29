@@ -1,0 +1,3 @@
+Do this: In first time one enters in our website, do this: Show a question like `Wanna COnnect with like minded people` or something else(catchy) if they say yes enter or else they can skip intro.
+In intro, show this: Do like storytelling, tell the problem, an example(john and james with models you have), with great 3d, transition and must be fast. Write something that tells them what we think then say start the journey.....
+That's it for now then go to signup part: 
