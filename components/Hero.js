@@ -6,7 +6,7 @@ import { Button } from './ui/button'
 
 const Hero = () => {
     return (
-        <main className='h-[92vh] flex mt-[8vh] text-white bg-black relative'>
+        <main className='h-screen flex text-white bg-black relative'>
             <Globe />
             <div className='absolute z-10 top-6/12 left-6/12 -translate-6/12 flex flex-col items-center gap-8 pointer-events-none'>
                 <h2 className='text-5xl'>What if the internet understood you?</h2>

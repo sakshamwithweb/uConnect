@@ -4,6 +4,12 @@ import { Stars } from './Stars'
 import { drawThreeGeo } from './threeGeoJSON'
 import { useEffect, useRef, useState } from 'react'
 
+/**
+ * Returns a Sphere with all countries's border.
+ * 
+ * @param countries An Array or Object, returned by components/threeGeoJSON.js
+ * @returns 
+ */
 function Earth({ countries }) {
     const globeRef = useRef()
     useFrame((state, delta) => {
@@ -24,8 +30,10 @@ export const Globe = () => {
     useEffect(() => {
         fetch("/ne_110m_land.json").then((response) => response.json()).then((json) => {
             const countriesGeo = drawThreeGeo({
-                json: json, radius: 2, materalOptions: {
-                    color: 0x80FF80,
+                json: json, radius: 2, materialOptions: {
+                    color: 0x008000,
+                    linewidth: 1,
+                    fog: true
                 }
             })
             setCountries(countriesGeo)

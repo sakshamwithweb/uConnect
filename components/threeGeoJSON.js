@@ -11,7 +11,12 @@ and draws the geoJSON geometries.
 Code from: https://github.com/bobbyroe/3d-globe-with-threejs/blob/main/src/threeGeoJSON.js
 */
 
-export function drawThreeGeo({ json, radius, materalOptions }) {
+export function drawThreeGeo({ json, radius, materialOptions }) {
+  //Disabling toJSON property at all..
+  Line2.prototype.toJSON = undefined;
+  LineGeometry.prototype.toJSON = undefined;
+  LineMaterial.prototype.toJSON = undefined;
+
   const container = new THREE.Object3D();
   container.userData.update = (t) => {
     for (let i = 0; i < container.children.length; i++) {
@@ -25,18 +30,21 @@ export function drawThreeGeo({ json, radius, materalOptions }) {
   const z_values = [];
   const json_geom = createGeometryArray(json);
 
-  //Re-usable array to hold coordinate values. This is necessary so that you can add
-  //interpolated coordinates. Otherwise, lines go through the sphere instead of wrapping around.
+
+  // Re-usable array to hold coordinate values. This is necessary so that you can add
+  // interpolated coordinates. Otherwise, lines go through the sphere instead of wrapping around.
+
   let coordinate_array = [];
+
   for (let geom_num = 0; geom_num < json_geom.length; geom_num++) {
     if (json_geom[geom_num].type == 'Point') {
       convertToSphereCoords(json_geom[geom_num].coordinates, radius);
-      drawParticle(x_values[0], y_values[0], z_values[0], materalOptions);
+      drawParticle(x_values[0], y_values[0], z_values[0], materialOptions);
 
     } else if (json_geom[geom_num].type == 'MultiPoint') {
       for (let point_num = 0; point_num < json_geom[geom_num].coordinates.length; point_num++) {
         convertToSphereCoords(json_geom[geom_num].coordinates[point_num], radius);
-        drawParticle(x_values[0], y_values[0], z_values[0], materalOptions);
+        drawParticle(x_values[0], y_values[0], z_values[0], materialOptions);
       }
 
     } else if (json_geom[geom_num].type == 'LineString') {
@@ -45,16 +53,16 @@ export function drawThreeGeo({ json, radius, materalOptions }) {
       for (let point_num = 0; point_num < coordinate_array.length; point_num++) {
         convertToSphereCoords(coordinate_array[point_num], radius);
       }
-      drawLine(x_values, y_values, z_values, materalOptions);
+      drawLine(x_values, y_values, z_values, materialOptions);
 
-    } else if (json_geom[geom_num].type == 'Polygon') {
+    } else if (json_geom[geom_num].type == 'Polygon') { // Note: This is being called only
       for (let segment_num = 0; segment_num < json_geom[geom_num].coordinates.length; segment_num++) {
         coordinate_array = createCoordinateArray(json_geom[geom_num].coordinates[segment_num]);
 
         for (let point_num = 0; point_num < coordinate_array.length; point_num++) {
           convertToSphereCoords(coordinate_array[point_num], radius);
         }
-        drawLine(x_values, y_values, z_values, materalOptions);
+        drawLine(x_values, y_values, z_values, materialOptions);
       }
 
     } else if (json_geom[geom_num].type == 'MultiLineString') {
@@ -64,7 +72,7 @@ export function drawThreeGeo({ json, radius, materalOptions }) {
         for (let point_num = 0; point_num < coordinate_array.length; point_num++) {
           convertToSphereCoords(coordinate_array[point_num], radius);
         }
-        drawLine(x_values, y_values, z_values, materalOptions);
+        drawLine(x_values, y_values, z_values, materialOptions);
       }
 
     } else if (json_geom[geom_num].type == 'MultiPolygon') {
@@ -75,7 +83,7 @@ export function drawThreeGeo({ json, radius, materalOptions }) {
           for (let point_num = 0; point_num < coordinate_array.length; point_num++) {
             convertToSphereCoords(coordinate_array[point_num], radius);
           }
-          drawLine(x_values, y_values, z_values, materalOptions);
+          drawLine(x_values, y_values, z_values, materialOptions);
         }
       }
     } else {
@@ -213,25 +221,16 @@ export function drawThreeGeo({ json, radius, materalOptions }) {
       verts.push(x_values[i], y_values[i], z_values[i]);
     }
     lineGeo.setPositions(verts);
-    // let hue = 0.3 + Math.random() * 0.2;
-    // if (Math.random() > 0.5) {
-    //   hue -= 0.3;
-    // }
-    const color = new THREE.Color("green")
-    const lineMaterial = new LineMaterial({
-      color,
-      linewidth: 1,
-      fog: true
-    });
+
+    const lineMaterial = new LineMaterial(options);
+    lineMaterial.resolution.set(window.innerWidth, window.innerHeight)
 
     const line = new Line2(lineGeo, lineMaterial);
     line.computeLineDistances();
-    const rate = Math.random() * 0.0002;
-    line.userData.update = (t) => {
-      lineMaterial.dashOffset = t * rate;
-    }
-    container.add(line);
 
+    // Actually we can't call container directly because when we say console.log, JS internally calls toJSON and in threejs, it looks for caches and Idk why the geometry cache is undefined and that causes the issue hence we can't log it.. or if want so such that it doesn't call toJSON
+    // console.log("children:", container.children.length);
+    container.add(line)
     clearArrays();
   }
 
@@ -241,5 +240,6 @@ export function drawThreeGeo({ json, radius, materalOptions }) {
     z_values.length = 0;
   }
 
+  // console.log(container.children)
   return container;
 }
