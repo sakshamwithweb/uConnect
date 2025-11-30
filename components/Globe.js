@@ -1,13 +1,13 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Edges, OrbitControls } from '@react-three/drei'
 import { Stars } from './Stars'
-import { drawThreeGeo } from './threeGeoJSON'
+import { drawThreeGeo } from '../lib/threeGeoJSON'
 import { useEffect, useRef, useState } from 'react'
 
 /**
  * Returns a Sphere with all countries's border.
  * 
- * @param countries An Array or Object, returned by components/threeGeoJSON.js
+ * @param countries A Object3D, returned by components/threeGeoJSON.js
  * @returns 
  */
 function Earth({ countries }) {
