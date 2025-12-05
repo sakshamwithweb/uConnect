@@ -67,17 +67,14 @@ function Earth({ countries, sphereRadius, countriesData }) {
             const p = intersects[0].point; // sphere coords
             mouseHelper?.current.position.copy(p)
 
-            // --Instead of rotating whole, what if I change value--
-            // p.applyAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI);
-            // p.applyAxisAngle(new THREE.Vector3(0, 0, 1), -3.2);
-            // p.applyAxisAngle(new THREE.Vector3(1, 0, 0), -1.58);
+            p.applyAxisAngle(new THREE.Vector3(1,0,0), Math.PI * 0.5) // Undoing what transformation we did (KLUDGY HACK) for correcting orientation
 
             const geoJsonCoords = convertToGeoJsonCoords(p)
 
             const geometryArr = createGeometryArray(countriesData)
 
             const israycasting = isRayCasting(geoJsonCoords, geometryArr)
-            if(israycasting) console.log(israycasting?.name)
+            if (israycasting) console.log(israycasting?.name)
 
             const normalMatrix = new THREE.Matrix3().getNormalMatrix(globeRef?.current.matrixWorld)
 
@@ -88,8 +85,6 @@ function Earth({ countries, sphereRadius, countriesData }) {
             mouseHelper.current.lookAt(n)
         }
     }
-
-
 
     // So currenly we have a raycaster, we can check at what country, we are currently in and do that effect. For that effect, we need particles which currently we don't have, what if we spawn the particles below the country we are hovering to then do that effect and as we move the cursor away, just get those particles below again then delete.
 
