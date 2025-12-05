@@ -87,7 +87,7 @@ function Earth({ countries, sphereRadius, countriesData }) {
     }
 
     // So currenly we have a raycaster, we can check at what country, we are currently in and do that effect. For that effect, we need particles which currently we don't have, what if we spawn the particles below the country we are hovering to then do that effect and as we move the cursor away, just get those particles below again then delete.
-
+    // NOTE: I am thinking to pause the homepage wherever it is, we will be doing rest of the things here later..
     /* Milestones:
         - [x] Identify current country or Ocean
         - [ ] Highlight the color of that country
@@ -141,6 +141,6 @@ export const Globe = () => {
         <Earth countries={countries} countriesData={countriesData} sphereRadius={sphereRadius} />
 
         <Stars noOfStars={3000} />
-        <OrbitControls enableDamping />
+        <OrbitControls enableZoom={false} autoRotate enableDamping />
     </Canvas>
 }
