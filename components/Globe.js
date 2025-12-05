@@ -54,7 +54,7 @@ function Earth({ countries, sphereRadius, countriesData }) {
         return result
     }
 
-    const handlePointMove = (x, y) => { // temp as onPointMove was too fast and automatic
+    const handlePointMove = (x, y) => {
         if (globeRef?.current == undefined) return;
         mouse.x = (x / gl.domElement.clientWidth) * 2 - 1;
         mouse.y = - (y / gl.domElement.clientHeight) * 2 + 1;
@@ -94,13 +94,9 @@ function Earth({ countries, sphereRadius, countriesData }) {
     // So currenly we have a raycaster, we can check at what country, we are currently in and do that effect. For that effect, we need particles which currently we don't have, what if we spawn the particles below the country we are hovering to then do that effect and as we move the cursor away, just get those particles below again then delete.
 
     /* Milestones:
-        - [ ] Identify current country or Ocean
-            - [x] Get coordinates of raycaster (Vector3)
-            - [x] Convert it into geojson coordinates
-            - [x] Get country details and its coordinates
-            - [ ] Convert country's coordinates back to globe coords
-        - Highlight the color of that country
-        - Add particles on hover and delete on moving away
+        - [x] Identify current country or Ocean
+        - [ ] Highlight the color of that country
+        - [ ] Add particles on hover and delete on moving away
     */
 
 
