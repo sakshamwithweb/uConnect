@@ -1,12 +1,34 @@
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Edges, OrbitControls } from '@react-three/drei'
 import { Stars } from './Stars'
 import { drawThreeGeo, convertToGeoJsonCoords, createGeometryArray } from '../lib/threeGeoJSON'
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { raycasting } from '@/lib/RayCasting'
 
 
+const Tour = ({ camera, setFadeOut, redirect }) => {
+    useFrame(() => {
+        // Zooming
+        camera.position.z *= 0.99
+        camera.position.x *= 0.99
+        camera.position.y *= 0.99
+    })
+
+    useEffect(() => {
+        setTimeout(() => {
+            // Fade Out
+            setFadeOut(true)
+
+            // Call redirect
+            setTimeout(() => {
+                redirect()
+            }, 1000);
+        }, 1000);
+    }, [])
+
+    return null
+}
 
 
 /**
@@ -15,13 +37,22 @@ import { raycasting } from '@/lib/RayCasting'
  * @param countries A Object3D, returned by components/threeGeoJSON.js
  * @returns 
  */
-function Earth({ countries, sphereRadius, countriesData }) {
+function Earth({ countries, sphereRadius, countriesData, tour, controls, redirect, setFadeOut }) {
+    const [zoom, setZoom] = useState(false)
     const globeRef = useRef()
     const rc = useRef()
     const mouseHelper = useRef()
 
     const mouse = new THREE.Vector2()
     const { gl, camera } = useThree()
+
+    useEffect(() => {
+        if (!tour) return
+        controls.autoRotate = false
+        setTimeout(() => {
+            setZoom(true)
+        }, 500);
+    }, [tour])
 
     const isRayCasting = (geoJsonCoords, geometryArr) => {
         /** Polygon (one segment): Simple one closed polygon country
@@ -67,7 +98,7 @@ function Earth({ countries, sphereRadius, countriesData }) {
             const p = intersects[0].point; // sphere coords
             mouseHelper?.current.position.copy(p)
 
-            p.applyAxisAngle(new THREE.Vector3(1,0,0), Math.PI * 0.5) // Undoing what transformation we did (KLUDGY HACK) for correcting orientation
+            p.applyAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI * 0.5) // Undoing what transformation we did (KLUDGY HACK) for correcting orientation
 
             const geoJsonCoords = convertToGeoJsonCoords(p)
 
@@ -97,6 +128,7 @@ function Earth({ countries, sphereRadius, countriesData }) {
 
     return (
         <>
+            {zoom && <Tour camera={camera} redirect={redirect} setFadeOut={setFadeOut} />}
             <raycaster ref={rc} />
             <mesh scale={0.04} ref={mouseHelper} visible={true}>
                 <boxGeometry args={[0.1, 0.1, 5]} />
@@ -112,11 +144,12 @@ function Earth({ countries, sphereRadius, countriesData }) {
     )
 }
 
-export const Globe = () => {
+export const Globe = ({ tour, redirect, setFadeOut }) => {
     const sphereRadius = 2;
 
     const [countries, setCountries] = useState()
     const [countriesData, setCountriesData] = useState()
+    const controls = useRef()
 
     // Fetching and placing countries on globe
     useEffect(() => {
@@ -135,12 +168,14 @@ export const Globe = () => {
     }, [])
 
 
-    return <Canvas gl={{ antialias: true }} camera={{ position: [0, 1, 10], fov: 25, near: 1, far: 100 }}>
-        <color attach={"background"} args={["black"]} />
+    return <Suspense fallback={null}>
+        <Canvas gl={{ antialias: true }} camera={{ position: [0, 1, 10], fov: 25, near: 1, far: 100 }}>
+            <color attach={"background"} args={["black"]} />
 
-        <Earth countries={countries} countriesData={countriesData} sphereRadius={sphereRadius} />
+            <Earth setFadeOut={setFadeOut} redirect={redirect} controls={controls?.current} tour={tour} countries={countries} countriesData={countriesData} sphereRadius={sphereRadius} />
 
-        <Stars noOfStars={3000} />
-        <OrbitControls enableZoom={false} autoRotate enableDamping />
-    </Canvas>
+            <Stars noOfStars={3000} />
+            <OrbitControls ref={controls} enableZoom={false} autoRotate enableDamping />
+        </Canvas>
+    </Suspense>
 }
