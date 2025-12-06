@@ -7,12 +7,13 @@ import * as THREE from 'three'
 import { raycasting } from '@/lib/RayCasting'
 
 
-const Tour = ({ camera, setFadeOut, redirect }) => {
+const Tour = ({camera, setFadeOut, redirect }) => {
     useFrame(() => {
         // Zooming
-        camera.position.z *= 0.99
-        camera.position.x *= 0.99
-        camera.position.y *= 0.99
+        const factor = 0.99
+        camera.position.setX(camera.position.x * factor)
+        camera.position.setY(camera.position.y * factor)
+        camera.position.setZ(camera.position.z * factor)
     })
 
     useEffect(() => {
@@ -37,18 +38,17 @@ const Tour = ({ camera, setFadeOut, redirect }) => {
  * @param countries A Object3D, returned by components/threeGeoJSON.js
  * @returns 
  */
-function Earth({ countries, sphereRadius, countriesData, tour, controls, redirect, setFadeOut }) {
+function Earth({ countries, sphereRadius, countriesData, tour, disableAutoRotate, redirect, setFadeOut }) {
     const [zoom, setZoom] = useState(false)
     const globeRef = useRef()
     const rc = useRef()
     const mouseHelper = useRef()
 
-    const mouse = new THREE.Vector2()
     const { gl, camera } = useThree()
 
     useEffect(() => {
         if (!tour) return
-        controls.autoRotate = false
+        disableAutoRotate()
         setTimeout(() => {
             setZoom(true)
         }, 500);
@@ -87,6 +87,7 @@ function Earth({ countries, sphereRadius, countriesData, tour, controls, redirec
 
     const handlePointMove = (x, y) => {
         if (globeRef?.current == undefined) return;
+        const mouse = new THREE.Vector2()
         mouse.x = (x / gl.domElement.clientWidth) * 2 - 1;
         mouse.y = - (y / gl.domElement.clientHeight) * 2 + 1;
 
@@ -151,6 +152,10 @@ export const Globe = ({ tour, redirect, setFadeOut }) => {
     const [countriesData, setCountriesData] = useState()
     const controls = useRef()
 
+    const disableAutoRotate = () => {
+        controls.current.autoRotate = false
+    }
+
     // Fetching and placing countries on globe
     useEffect(() => {
         (async () => {
@@ -172,7 +177,7 @@ export const Globe = ({ tour, redirect, setFadeOut }) => {
         <Canvas gl={{ antialias: true }} camera={{ position: [0, 1, 10], fov: 25, near: 1, far: 100 }}>
             <color attach={"background"} args={["black"]} />
 
-            <Earth setFadeOut={setFadeOut} redirect={redirect} controls={controls?.current} tour={tour} countries={countries} countriesData={countriesData} sphereRadius={sphereRadius} />
+            <Earth setFadeOut={setFadeOut} redirect={redirect} disableAutoRotate={disableAutoRotate} tour={tour} countries={countries} countriesData={countriesData} sphereRadius={sphereRadius} />
 
             <Stars noOfStars={3000} />
             <OrbitControls ref={controls} enableZoom={false} autoRotate enableDamping />
