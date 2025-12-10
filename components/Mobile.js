@@ -19,6 +19,7 @@ const Mobile = () => {
             roughness: 1,
             side: THREE.FrontSide
         });
+        // eslint-disable-next-line react-hooks/immutability
         texture.flipY = false
         texture.needsUpdate = true
         screenMesh.material.needsUpdate = true;
