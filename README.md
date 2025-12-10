@@ -1,4 +1,4 @@
-## UConnect
+## UConnect: Intro
 
 Well......
 Just a Social Media I think.. No it is much more than that!
@@ -22,3 +22,21 @@ Current Focus: `Do not go for perfection, go for MVP then make it perfect.. This
 link: https://u-connect-rho.vercel.app
 
 Btw I am thinking it is more like a problem looking for a solution but whatever, lets build it!
+
+
+## Setup
+! If you are hack club reviewer, read this pls: [HC](/HC.md)
+
+### Prerequisites
+- Node.js (v18+)
+- npm
+- Git
+
+### Steps
+```bash
+git clone https://github.com/sakshamwithweb/uConnect.git
+cd uConnect
+npm install
+npm run dev
+```
+App runs at: http://localhost:3000 by default
