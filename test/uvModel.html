@@ -35,13 +35,14 @@
                 this.initialSetup()
                 this.test()
                 this.renderer.setAnimationLoop(this.animate.bind(this))
+                this.clock = new THREE.Clock()
             }
 
             async test() {
-                // const boxG = new THREE.BoxGeometry(1, 1, 1)
-                // const boxM = new THREE.MeshStandardMaterial({ color: 0x00ff00 })
-                // this.box = new THREE.Mesh(boxG, boxM)
-                // this.scene.add(this.box)
+                const boxG = new THREE.BoxGeometry(1, 1, 1)
+                const boxM = new THREE.MeshStandardMaterial({ color: 0x00ff00 })
+                this.box = new THREE.Mesh(boxG, boxM)
+                this.scene.add(this.box)
 
                 // const gltf = await this.GLTFLoader.loadAsync("./assets/Mobile.glb")
                 // const screenMesh = gltf.scene.children.find((a) => a.name == "Screen")
@@ -53,10 +54,16 @@
                 //     }
                 // });
                 // this.scene.add(gltf.scene)
+
             }
 
             animate() {
+                const time = this.clock.getElapsedTime()
                 if (this?.controls) this.controls.update()
+
+                this.box.position.y = Math.cos(time) * 0.1;
+                // console.log(time)
+
                 this.resize()
                 this.renderer.render(this.scene, this.camera)
             }
@@ -72,7 +79,7 @@
                 this.renderer.setPixelRatio(window.devicePixelRatio)
                 document.body.appendChild(this.renderer.domElement)
 
-                this.light = new THREE.AmbientLight()
+                this.light = new THREE.SpotLight(0xffffff)
                 this.scene.add(this.light)
 
                 this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
