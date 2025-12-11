@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/immutability */
 import { useFrame, useLoader } from '@react-three/fiber'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import React, { useEffect } from 'react'
@@ -18,15 +17,19 @@ const Mobile = () => {
             roughness: 1,
             side: THREE.FrontSide
         });
-        texture.flipY = false
-        texture.needsUpdate = true
+        screenMesh.material.map.flipY = false
         screenMesh.material.needsUpdate = true;
     }, [gltf, texture])
 
     useFrame(({ clock }) => {
         // Floating effect
         const time = clock.getElapsedTime();
-        gltf.scene.position.y = Math.sin(time) * 0.05
+        if(gltf.scene){
+            const model = gltf.scene
+            // eslint-disable-next-line react-hooks/immutability
+            model.position.y = Math.sin(time) * 0.05
+        }
+        // gltf.scene.position.y = Math.sin(time) * 0.05
     })
 
     return <primitive object={gltf.scene} />
