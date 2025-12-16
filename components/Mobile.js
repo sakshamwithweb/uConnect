@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useVideoTexture } from '@react-three/drei'
 import * as THREE from "three"
 
-const Mobile = () => {
+const Mobile = ({mobileRef}) => {
     const gltf = useLoader(GLTFLoader, "/glbs/Mobile.glb")
     const texture = useVideoTexture("/input.mp4")
 
@@ -24,15 +24,14 @@ const Mobile = () => {
     useFrame(({ clock }) => {
         // Floating effect
         const time = clock.getElapsedTime();
-        if(gltf.scene){
-            const model = gltf.scene
-            // eslint-disable-next-line react-hooks/immutability
-            model.position.y = Math.sin(time) * 0.05
-        }
-        // gltf.scene.position.y = Math.sin(time) * 0.05
+        // if(gltf.scene){
+        //     const model = gltf.scene
+        //     // eslint-disable-next-line react-hooks/immutability
+        //     model.position.y = Math.sin(time) * 0.05 <- fighting with gsap
+        // }
     })
 
-    return <primitive object={gltf.scene} />
+    return <primitive ref={mobileRef} object={gltf.scene} />
 }
 
 export default Mobile
