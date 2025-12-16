@@ -5,11 +5,11 @@ import { FadeIn } from '@/components/Fade'
 import Html from '@/components/Html'
 import Mobile from '@/components/Mobile'
 import { useGSAP } from '@gsap/react'
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import * as THREE from "three"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -78,7 +78,7 @@ const page = () => {
           {/* ~~At first float the mobile and~~ as we scroll start typing and say AI is not what you think, then bring the mobile in bottom and rotate it and get in the hand of the model who later does handshake */}
           <Mobile mobileRef={mobileRef} />
 
-          <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} />
+          <OrbitControls />
         </Canvas>
       </div>
       <Html segmentRef={segmentRef} setSegment={setSegment} />
