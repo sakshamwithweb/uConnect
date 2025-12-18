@@ -16,7 +16,7 @@ const Html = ({ segmentRefs, progress, onReady }) => {
             title: "AI is not what you think"
         },
         {
-            height: "screen"
+            height: "[200vh]"
         },
         {
             title: "So does Social Media?"
