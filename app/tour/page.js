@@ -86,12 +86,12 @@ const page = () => {
           <ambientLight />
 
           {/*Sync in the animation with gsap!*/}
+          <Characters progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
           <Mobile mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
-          <Characters position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
 
-          {/* <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} /> */}
+          <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} />
           <axesHelper />
-          <OrbitControls />
+          {/* <OrbitControls /> */}
         </Canvas>
       </div>
       <Html progress={progress} onReady={() => setHtmlReady(true)} segmentRefs={segmentRefs} />

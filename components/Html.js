@@ -26,7 +26,7 @@ const Html = ({ segmentRefs, progress, onReady }) => {
         }
     ]
 
-    progress.current = useRef(segments.map(() => 0)) // arr of 0s
+    progress.current = segments.map(() => 0) // arr of 0s
 
     useGSAP(() => { // For updating progress and triggerRef for sync in with R3F
         segments.forEach((_, i) => {
