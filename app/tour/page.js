@@ -17,10 +17,10 @@ gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 // Tour Page: 
 const page = () => {
-  const [segment, setSegment] = useState(0)
   const rc = useRef()
   const camera = useRef()
-  const firstSegmentRef = useRef()
+  const progress = useRef()
+  const segmentRefs = useRef([])
   const currentFocus = useRef()
   const mobileRef = useRef()
 
@@ -39,31 +39,31 @@ const page = () => {
   }
 
   useGSAP(() => {
-    if (!mobileRef.current || !firstSegmentRef.current) return // || !camera.current
-
-    if (segment == 1) {
+    console.log(mobileRef.current)
+    if (!mobileRef.current || !segmentRefs.current) return // || !camera.current
+    if (segmentRefs.current[1]) { // 1st segment(AI) (IN FUTURE MAKE IT ALSO IN A OBJECT AND CALL!)
       currentFocus.current = mobileRef.current
       gsap.to(mobileRef.current?.position, { // Mobile position
         y: -1.2,
         duration: 2,
         scrollTrigger: {
-          trigger: firstSegmentRef.current,
-          start: "top 20%",
-          end: "+=2000px",
+          trigger: segmentRefs.current[1],
+          start: "top center",
+          end: "bottom center",
           scrub: true
         }
       })
       gsap.to(mobileRef.current?.rotation, { // Mobile Rotation
         y: Math.PI * 3,
         scrollTrigger: {
-          trigger: firstSegmentRef.current,
-          start: "top -20%",
-          end: "+=1500px",
+          trigger: segmentRefs.current[1],
+          start: "top center",
+          end: "bottom center",
           scrub: true
         }
       })
     }
-  }, [segment, firstSegmentRef.current])
+  }, [segmentRefs, mobileRef])
 
 
   return (
@@ -86,7 +86,7 @@ const page = () => {
           <OrbitControls />
         </Canvas>
       </div>
-      <Html firstSegmentRef={firstSegmentRef} setSegment={setSegment} />
+      <Html progress={progress} segmentRefs={segmentRefs} />
     </div>
   )
 }
