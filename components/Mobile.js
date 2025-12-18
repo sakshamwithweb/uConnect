@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useVideoTexture } from '@react-three/drei'
 import * as THREE from "three"
 
-const Mobile = ({mobileRef}) => {
+const Mobile = ({ mobileRef, onReady }) => {
     const gltf = useLoader(GLTFLoader, "/glbs/Mobile.glb")
     const texture = useVideoTexture("/input.mp4")
 
@@ -20,6 +20,12 @@ const Mobile = ({mobileRef}) => {
         screenMesh.material.map.flipY = false
         screenMesh.material.needsUpdate = true;
     }, [gltf, texture])
+
+    useEffect(() => {
+        if (mobileRef.current) {
+            onReady()
+        }
+    }, [])
 
     useFrame(({ clock }) => {
         // Floating effect

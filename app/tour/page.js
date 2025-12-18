@@ -10,7 +10,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from "three"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -23,6 +23,8 @@ const page = () => {
   const segmentRefs = useRef([])
   const currentFocus = useRef()
   const mobileRef = useRef()
+  const [mobileReady, setMobileReady] = useState(false)
+  const [htmlReady, setHtmlReady] = useState(false)
 
   // IN FUTURE CHANGE THE EFFECT WEIGHT ACCORDING TO CAMERA POSITION(the closer, the less)
   const handlePointMove = (event) => {
@@ -39,15 +41,15 @@ const page = () => {
   }
 
   useGSAP(() => {
-    console.log(mobileRef.current)
-    if (!mobileRef.current || !segmentRefs.current) return // || !camera.current
-    if (segmentRefs.current[1]) { // 1st segment(AI) (IN FUTURE MAKE IT ALSO IN A OBJECT AND CALL!)
+    if (!mobileRef.current || !segmentRefs.current) return
+
+    if (segmentRefs.current[2]) { // 2nd segment(b/w AI and Social Media) (IN FUTURE MAKE IT ALSO IN A OBJECT AND CALL!)
       currentFocus.current = mobileRef.current
       gsap.to(mobileRef.current?.position, { // Mobile position
         y: -1.2,
         duration: 2,
         scrollTrigger: {
-          trigger: segmentRefs.current[1],
+          trigger: segmentRefs.current[2],
           start: "top center",
           end: "bottom center",
           scrub: true
@@ -56,14 +58,20 @@ const page = () => {
       gsap.to(mobileRef.current?.rotation, { // Mobile Rotation
         y: Math.PI * 3,
         scrollTrigger: {
-          trigger: segmentRefs.current[1],
+          trigger: segmentRefs.current[2],
           start: "top center",
           end: "bottom center",
           scrub: true
         }
       })
     }
-  }, [segmentRefs, mobileRef])
+  }, [mobileReady, htmlReady])
+
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     console.log(progress.current)
+  //   }, 500);
+  // },[])
 
 
   return (
@@ -78,7 +86,7 @@ const page = () => {
           <ambientLight />
 
           {/*Sync in the animation with gsap!*/}
-          <Mobile mobileRef={mobileRef} />
+          <Mobile mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
           <Characters position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
 
           {/* <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} /> */}
@@ -86,7 +94,7 @@ const page = () => {
           <OrbitControls />
         </Canvas>
       </div>
-      <Html progress={progress} segmentRefs={segmentRefs} />
+      <Html progress={progress} onReady={() => setHtmlReady(true)} segmentRefs={segmentRefs} />
     </div>
   )
 }

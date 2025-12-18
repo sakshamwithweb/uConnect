@@ -6,7 +6,7 @@ import React, { useRef } from 'react'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const Html = ({ segmentRefs, progress }) => {
+const Html = ({ segmentRefs, progress, onReady }) => {
 
     const segments = [
         {
@@ -31,6 +31,7 @@ const Html = ({ segmentRefs, progress }) => {
     useGSAP(() => { // For updating progress and triggerRef for sync in with R3F
         segments.forEach((_, i) => {
             const triggerRef = segmentRefs.current[i]
+            if (i == segments.length - 1) onReady() // If it is last..
             if (!triggerRef) return
             gsap.to(triggerRef, {
                 scrollTrigger: {
