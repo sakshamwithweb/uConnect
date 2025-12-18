@@ -5,13 +5,13 @@ import React from 'react'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const Html = ({ setSegment, segmentRef }) => {
+const Html = ({ setSegment, firstSegmentRef }) => {
     useGSAP(() => {
-        gsap.to(segmentRef?.current, {
+        gsap.to(firstSegmentRef?.current, {
             opacity: 1,
             duration: 5,
             scrollTrigger: {
-                trigger: segmentRef?.current,
+                trigger: firstSegmentRef?.current,
                 start: "top center",
                 end: "+=1000px",
                 onEnter: () => { setSegment(1) },
@@ -25,7 +25,7 @@ const Html = ({ setSegment, segmentRef }) => {
     return (
         <div className='flex overflow-x-hidden flex-col relative z-10 pointer-events-none'>
             <div className='h-[70vh]'></div>
-            <div ref={segmentRef} className='text-5xl opacity-0 text-center font-semibold'>
+            <div ref={firstSegmentRef} className='text-5xl opacity-0 text-center font-semibold'>
                 <p>AI is not what you think</p>
             </div>
             <div className='h-[400vh]'></div>

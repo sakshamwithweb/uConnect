@@ -27,7 +27,7 @@ const Mobile = ({mobileRef}) => {
         // if(gltf.scene){
         //     const model = gltf.scene
         //     // eslint-disable-next-line react-hooks/immutability
-        //     model.position.y = Math.sin(time) * 0.05 <- fighting with gsap
+        //     model.position.y = Math.sin(time) * 0.05 <- fighting with gsap {https://gsap.com/community/forums/topic/44834-how-to-use-gsap-scrolltrigger-or-timeline-with-floating-threejs-models/}
         // }
     })
 
