@@ -67,12 +67,6 @@ const page = () => {
     }
   }, [mobileReady, htmlReady])
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     console.log(progress.current)
-  //   }, 500);
-  // },[])
-
 
   return (
     <div className='bg-black min-h-screen text-white relative'>
@@ -85,7 +79,6 @@ const page = () => {
           <raycaster ref={rc} />
           <ambientLight />
 
-          {/*Sync in the animation with gsap!*/}
           <Characters progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
           <Mobile mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
 

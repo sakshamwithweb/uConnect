@@ -1,6 +1,6 @@
 import { useFrame, useLoader } from '@react-three/fiber'
 import React, { useEffect, useRef } from 'react'
-import { AnimationMixer, LoopOnce } from 'three'
+import { AnimationMixer } from 'three'
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
@@ -10,10 +10,6 @@ const Characters = ({ position, scale, progress }) => {
     // const animations = useLoader(FBXLoader, ['/anim/Waving.fbx']) // Load all maximo or other animations
     const mixerRef = useRef()
     const mobileViewClipRef = useRef()
-
-    useEffect(() => { // progress.current[2] : 0 to 1
-        // setInterval(() => console.log(progress.current[2]), 500);
-    }, [progress])
 
     useEffect(() => {
         if (!glbModel?.scene) return
@@ -27,7 +23,6 @@ const Characters = ({ position, scale, progress }) => {
     }, [glbModel])
 
     useFrame(() => {
-        // console.log(progress.current[2])
         const mixer = mixerRef.current
         const clip = mobileViewClipRef.current
         let t;
@@ -40,25 +35,3 @@ const Characters = ({ position, scale, progress }) => {
 }
 
 export default Characters
-
-
-
-// export const Model = (progress) => {
-//     const glbModel = useLoader(GLTFLoader, '/glbs/Male.glb')
-//     const mixerRef = useRef()
-
-//     useEffect(() => {
-//         if (!glbModel?.scene) return
-//         const clip = glbModel.animations.find((a) => a.name == "MobileView")
-//         const mixer = new AnimationMixer(glbModel.scene)
-//         mixerRef.current = mixer
-//         const action = mixer.clipAction(clip)
-//         action.play()
-//     }, [glbModel])
-
-//     useFrame(() => {
-//         mixerRef.current.update()
-//     })
-
-//     return <primitive object={glbModel?.scene} />
-// }

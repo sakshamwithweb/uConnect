@@ -22,9 +22,7 @@ const Mobile = ({ mobileRef, onReady }) => {
     }, [gltf, texture])
 
     useEffect(() => {
-        if (mobileRef.current) {
-            onReady()
-        }
+        if (mobileRef.current) onReady()
     }, [])
 
     useFrame(({ clock }) => {
