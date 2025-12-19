@@ -65,6 +65,15 @@ const page = () => {
         }
       })
     }
+
+    if (segmentRefs.current[3]) {
+      /* start: top center, end bottom center
+      Do these:
+        - Sync in the handshake animation with scroll
+        - Load second person as well
+        - move the camera with hand then after handshake, backward so as to both people can be seen correctly
+      */
+    }
   }, [mobileReady, htmlReady])
 
 

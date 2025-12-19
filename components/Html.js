@@ -10,15 +10,13 @@ const Html = ({ segmentRefs, progress, onReady }) => {
 
     const segments = [
         {
-            height: "screen",
-            unitType: "plain"
+            height: "100vh"
         },
         {
             title: "AI is not what you think"
         },
         {
-            height: "200",
-            unitType: "vh"
+            height: "200vh"
         },
         {
             title: "So does Social Media?"
@@ -73,7 +71,7 @@ const Html = ({ segmentRefs, progress, onReady }) => {
                     )
                 } else { // Just gaps with height param
                     return (
-                        <div className={`h-${segment.unitType == "vh" ? `[${segment.height}vh]` : `${segment.height}`}`} key={i} ref={(el) => segmentRefs.current[i] = el}></div>
+                        <div style={{ height: segment.height }} key={i} ref={(el) => segmentRefs.current[i] = el}></div>
                     )
                 }
             })}

@@ -13,7 +13,7 @@ const Characters = ({ position, scale, progress }) => {
 
     useEffect(() => {
         if (!glbModel?.scene) return
-        console.log(glbModel)
+        // console.log(glbModel)
         const mixer = new AnimationMixer(glbModel.scene)
         mixerRef.current = mixer
         mobileViewClipRef.current = glbModel.animations.find((a) => a.name == "MobileView")
@@ -25,6 +25,7 @@ const Characters = ({ position, scale, progress }) => {
     useFrame(() => {
         const mixer = mixerRef.current
         const clip = mobileViewClipRef.current
+        if (!mixer || !clip) return
         let t;
         if (progress.current[2] == 1) t = clip.duration * (progress.current[2] - 0.01)
         else t = clip.duration * progress.current[2]
