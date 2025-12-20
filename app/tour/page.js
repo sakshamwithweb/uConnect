@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 import Camera from '@/components/Camera'
-import Characters from '@/components/Characters'
+import { MaleCharacter, SecondCharacter } from '@/components/Characters'
 import { FadeIn } from '@/components/Fade'
 import Html from '@/components/Html'
 import Mobile from '@/components/Mobile'
@@ -68,7 +68,8 @@ const page = () => {
 
     if (segmentRefs.current[3]) {
       gsap.to(camera.current?.position, {
-        x: 2,
+        x: 4,
+        y: -1,
         scrollTrigger: {
           trigger: segmentRefs.current[3],
           scrub: true
@@ -76,7 +77,6 @@ const page = () => {
       })
       /* start: top center, end bottom center
       Do these:
-        - Load second person as well
         - The mobile position must be in hand..
       */
     }
@@ -94,8 +94,12 @@ const page = () => {
           <raycaster ref={rc} />
           <ambientLight />
 
-          <Characters segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
+
           <Mobile mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
+          <group>
+            <MaleCharacter segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
+            <SecondCharacter progress={progress} rotation={[0, Math.PI, 0]} position={[0.1, -1.7, 0.85]} scale={[0.9, 0.9, 0.9]} />
+          </group>
 
           {/* <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} /> */}
           <axesHelper />

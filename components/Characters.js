@@ -5,7 +5,7 @@ import { AnimationMixer } from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
 // Encrypt model through Draco in future
-const Characters = ({ position, scale, progress }) => {
+export const MaleCharacter = ({ position, scale, progress }) => {
     const glbModel = useLoader(GLTFLoader, '/glbs/Male.glb')
     const mixerRef = useRef()
     const mobileViewAndHandShakingActionRef = useRef()
@@ -43,4 +43,31 @@ const Characters = ({ position, scale, progress }) => {
     return <primitive position={position} scale={scale} object={glbModel.scene} />
 }
 
-export default Characters
+export const SecondCharacter = ({ position, scale, rotation, progress }) => {
+    const model = useLoader(GLTFLoader, "/glbs/Character2.glb")
+    const mixerRef = useRef()
+    const handshakeActionRef = useRef()
+
+    useEffect(() => {
+        if (!model) return
+        const handshakeClip = model.animations.find((a) => a.name == "Handshake")
+        mixerRef.current = new AnimationMixer(model.scene)
+        handshakeActionRef.current = mixerRef.current.clipAction(handshakeClip)
+        handshakeActionRef.current.play()
+        handshakeActionRef.current.paused = true
+    }, [model])
+
+    useFrame(() => {
+        const mixer = mixerRef.current
+        const seg3 = progress.current[3]
+
+        if (seg3 > 0 && seg3 < 1) {
+            handshakeActionRef.current.time = (handshakeActionRef.current?.getClip().duration-0.2) * seg3
+            // console.log(handshakeActionRef.current.getClip())
+        }
+
+        mixer?.update(0)
+    })
+
+    return <primitive position={position} rotation={rotation} scale={scale} object={model?.scene} />
+}
