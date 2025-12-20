@@ -58,7 +58,21 @@ const Html = ({ segmentRefs, progress, onReady }) => {
                 pin: true
             }
         })
-    }, [segmentRefs])
+    })
+
+    useGSAP(() => {
+        gsap.fromTo(segmentRefs.current[3], { opacity: 0 }, {
+            opacity: 1,
+            duration: 2,
+            scrollTrigger: {
+                trigger: segmentRefs.current[3],
+                start: "top top",
+                end: "bottom center",
+                scrub: true,
+                pin: true
+            }
+        })
+    })
 
     return (
         <div className='flex overflow-x-hidden flex-col relative z-10 pointer-events-none'>

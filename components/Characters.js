@@ -8,8 +8,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 const Characters = ({ position, scale, progress }) => {
     const glbModel = useLoader(GLTFLoader, '/glbs/Male.glb')
     const mixerRef = useRef()
-    const mobileViewActionRef = useRef()
-    const handShakeActionRef = useRef()
+    const mobileViewAndHandShakingActionRef = useRef()
 
     useEffect(() => {
         if (!glbModel?.scene) return
@@ -17,39 +16,26 @@ const Characters = ({ position, scale, progress }) => {
         mixerRef.current = mixer
 
         // Mobile view clip
-        const mobileViewClip = glbModel.animations.find((a) => a.name == "holdingmobile")
-        mobileViewActionRef.current = mixer.clipAction(mobileViewClip)
+        const mobileViewAndHandShakingClip = glbModel.animations.find((a) => a.name == "mobileViewAndHandShaking")
+        mobileViewAndHandShakingActionRef.current = mixerRef.current.clipAction(mobileViewAndHandShakingClip)
 
-        // Hand shake clip
-        const handShakeClip = glbModel.animations.find((a) => a.name == "handshaking")
-        handShakeActionRef.current = mixer.clipAction(handShakeClip)
-
-        mobileViewActionRef.current.play()
-        handShakeActionRef.current.play()
-
-        mobileViewActionRef.current.paused = true
-        handShakeActionRef.current.paused = true
+        mobileViewAndHandShakingActionRef.current.play()
+        mobileViewAndHandShakingActionRef.current.paused = true
     }, [glbModel])
 
     useFrame(() => {
         const mixer = mixerRef.current
-        const mobileViewClip = mobileViewActionRef.current?.getClip()
-        const handshakeClip = handShakeActionRef.current?.getClip()
+        const mobileViewAndHandShakingClip = mobileViewAndHandShakingActionRef.current?.getClip()
 
-        if (!mixer || !mobileViewClip || !handshakeClip) return
+        if (!mixer || !mobileViewAndHandShakingClip) return
 
         const seg2 = progress.current[2]
         const seg3 = progress.current[3]
 
         if (seg2 > 0 && seg2 < 1) {
-            if (mobileViewActionRef.current.weight != 1) mobileViewActionRef.current.weight = 1
-            if (handShakeActionRef.current.weight != 0) handShakeActionRef.current.weight = 0
-            mobileViewActionRef.current.time = mobileViewClip.duration * seg2
-            // console.log(mobileViewActionRef.current)
+            mobileViewAndHandShakingActionRef.current.time = (mobileViewAndHandShakingClip.duration / 3) * seg2
         } else if (seg3 > 0 && seg3 < 1) {
-            if (handShakeActionRef.current.weight != 1) handShakeActionRef.current.weight = 1
-            if (mobileViewActionRef.current.weight != 0) handShakeActionRef.current.weight = 0
-            handShakeActionRef.current.time = handshakeClip.duration * seg3
+            mobileViewAndHandShakingActionRef.current.time = (mobileViewAndHandShakingClip.duration * seg3) + mobileViewAndHandShakingClip.duration / 3
         }
         mixer.update(0)
     })
