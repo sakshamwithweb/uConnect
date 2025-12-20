@@ -67,12 +67,17 @@ const page = () => {
     }
 
     if (segmentRefs.current[3]) {
+      gsap.to(camera.current?.position, {
+        x: 2,
+        scrollTrigger: {
+          trigger: segmentRefs.current[3],
+          scrub: true
+        }
+      })
       /* start: top center, end bottom center
       Do these:
-        - Sync in the handshake animation with scroll - We need to do this in Characters components and do actions based on current segment we are working on 
-        - The mobile position must be in hand..
         - Load second person as well
-        - move the camera with hand then after handshake, backward so as to both people can be seen correctly
+        - The mobile position must be in hand..
       */
     }
   }, [mobileReady, htmlReady])
@@ -89,7 +94,7 @@ const page = () => {
           <raycaster ref={rc} />
           <ambientLight />
 
-          <Characters segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]}  />
+          <Characters segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
           <Mobile mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
 
           {/* <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} /> */}
