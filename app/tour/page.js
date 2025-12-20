@@ -69,7 +69,8 @@ const page = () => {
     if (segmentRefs.current[3]) {
       /* start: top center, end bottom center
       Do these:
-        - Sync in the handshake animation with scroll
+        - Sync in the handshake animation with scroll - We need to do this in Characters components and do actions based on current segment we are working on 
+        - The mobile position must be in hand..
         - Load second person as well
         - move the camera with hand then after handshake, backward so as to both people can be seen correctly
       */
@@ -82,18 +83,19 @@ const page = () => {
       <FadeIn />
 
       <div className='fixed top-0 left-0 h-screen w-screen'>
-        <Canvas className='' onPointerMove={handlePointMove}>
+        <Canvas className='' > {/*onPointerMove={handlePointMove}*/}
           <color args={["gray"]} attach={"background"} />
           <Camera position={[0, 0, 0.25]} currentFocus={currentFocus} camera={camera} />
           <raycaster ref={rc} />
           <ambientLight />
 
-          <Characters progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
+          <Characters segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]}  />
           <Mobile mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
 
-          <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} />
+          {/* <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} /> */}
           <axesHelper />
-          {/* <OrbitControls /> */}
+          <OrbitControls />
+          <gridHelper />
         </Canvas>
       </div>
       <Html progress={progress} onReady={() => setHtmlReady(true)} segmentRefs={segmentRefs} />
