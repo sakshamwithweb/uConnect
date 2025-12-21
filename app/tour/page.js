@@ -98,9 +98,9 @@ const page = () => {
             <SecondCharacter progress={progress} rotation={[0, Math.PI, 0]} position={[0.1, -1.7, 0.85]} scale={[0.9, 0.9, 0.9]} />
           </group>
 
-          {/* <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} /> */}
+          <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} />
           <axesHelper />
-          <OrbitControls />
+          {/* <OrbitControls /> */}
           <gridHelper />
         </Canvas>
       </div>
