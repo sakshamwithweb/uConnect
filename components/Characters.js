@@ -63,7 +63,6 @@ export const SecondCharacter = ({ position, scale, rotation, progress }) => {
 
         if (seg3 > 0 && seg3 < 1) {
             handshakeActionRef.current.time = (handshakeActionRef.current?.getClip().duration-0.2) * seg3
-            // console.log(handshakeActionRef.current.getClip())
         }
 
         mixer?.update(0)

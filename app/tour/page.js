@@ -67,6 +67,7 @@ const page = () => {
     }
 
     if (segmentRefs.current[3]) {
+      // for segment 3.
       gsap.to(camera.current?.position, {
         x: 4,
         y: -1,
@@ -75,10 +76,6 @@ const page = () => {
           scrub: true
         }
       })
-      /* start: top center, end bottom center
-      Do these:
-        - The mobile position must be in hand..
-      */
     }
   }, [mobileReady, htmlReady])
 
@@ -95,7 +92,7 @@ const page = () => {
           <ambientLight />
 
 
-          <Mobile mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
+          <Mobile progress={progress} mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
           <group>
             <MaleCharacter segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
             <SecondCharacter progress={progress} rotation={[0, Math.PI, 0]} position={[0.1, -1.7, 0.85]} scale={[0.9, 0.9, 0.9]} />
