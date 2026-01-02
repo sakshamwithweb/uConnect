@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/immutability */
 import { useFrame, useLoader } from '@react-three/fiber'
 import React, { useEffect, useRef } from 'react'
 import { AnimationMixer } from 'three'
@@ -12,8 +11,7 @@ export const MaleCharacter = ({ position, scale, progress }) => {
 
     useEffect(() => {
         if (!glbModel?.scene) return
-        const mixer = new AnimationMixer(glbModel.scene)
-        mixerRef.current = mixer
+        mixerRef.current = new AnimationMixer(glbModel.scene)
 
         // Mobile view clip
         const mobileViewAndHandShakingClip = glbModel.animations.find((a) => a.name == "mobileViewAndHandShaking")
@@ -32,10 +30,11 @@ export const MaleCharacter = ({ position, scale, progress }) => {
         const seg2 = progress.current[2]
         const seg3 = progress.current[3]
 
+        const mobileViewAnimDuration = mobileViewAndHandShakingClip.duration * 0.34259259259 // 
         if (seg2 > 0 && seg2 < 1) {
-            mobileViewAndHandShakingActionRef.current.time = (mobileViewAndHandShakingClip.duration / 3) * seg2
+            mobileViewAndHandShakingActionRef.current.time = mobileViewAnimDuration * seg2
         } else if (seg3 > 0 && seg3 < 1) {
-            mobileViewAndHandShakingActionRef.current.time = (mobileViewAndHandShakingClip.duration * seg3) + mobileViewAndHandShakingClip.duration / 3
+            mobileViewAndHandShakingActionRef.current.time = ((mobileViewAndHandShakingClip.duration - mobileViewAnimDuration) * seg3) + mobileViewAnimDuration
         }
         mixer.update(0)
     })
@@ -62,7 +61,7 @@ export const SecondCharacter = ({ position, scale, rotation, progress }) => {
         const seg3 = progress.current[3]
 
         if (seg3 > 0 && seg3 < 1) {
-            handshakeActionRef.current.time = (handshakeActionRef.current?.getClip().duration-0.2) * seg3
+            handshakeActionRef.current.time = (handshakeActionRef.current?.getClip().duration - 0.2) * seg3
         }
 
         mixer?.update(0)

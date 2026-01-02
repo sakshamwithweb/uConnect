@@ -47,7 +47,6 @@ const page = () => {
       currentFocus.current = mobileRef.current
       gsap.to(mobileRef.current?.position, { // Mobile position
         y: -1.2,
-        duration: 2,
         scrollTrigger: {
           trigger: segmentRefs.current[2],
           start: "top center",

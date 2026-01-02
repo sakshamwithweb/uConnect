@@ -46,10 +46,9 @@ const Html = ({ segmentRefs, progress, onReady }) => {
         })
     })
 
-    useGSAP(() => { // For fade in effect in 1st segment only
+    useGSAP(() => { // For fade in effect in 1st segment(AI is not what you think)
         gsap.fromTo(segmentRefs.current[1], { opacity: 0 }, {
             opacity: 1,
-            duration: 2,
             scrollTrigger: {
                 trigger: segmentRefs.current[1],
                 start: "top top",
@@ -61,9 +60,8 @@ const Html = ({ segmentRefs, progress, onReady }) => {
     })
 
     useGSAP(() => {
-        gsap.fromTo(segmentRefs.current[3], { opacity: 0 }, {
+        gsap.fromTo(segmentRefs.current[3], { opacity: 0 }, { // For fade in effect in 3rd segment(So does Social Media)
             opacity: 1,
-            duration: 2,
             scrollTrigger: {
                 trigger: segmentRefs.current[3],
                 start: "top top",
