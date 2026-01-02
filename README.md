@@ -25,7 +25,6 @@ Btw I am thinking it is more like a problem looking for a solution but whatever,
 
 
 ## Setup
-! If you are hack club reviewer, read this pls: [HC](/HC.md)
 
 ### Prerequisites
 - Node.js (v18+)
