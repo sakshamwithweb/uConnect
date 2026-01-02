@@ -1,5 +1,0 @@
-- handlePointMove()
-- convertToGeoJsonCoords
-
-
-

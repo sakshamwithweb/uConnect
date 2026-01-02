@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- We are doing it for test of UV -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+  }
+}
+</script>
+    <!-- <video id="video" playsinline webkit-playsinline muted loop autoplay width="320" height="240" src="./assets/input.mp4" style="opacity: 0;"></video> -->
+    <script type="module">
+        import * as THREE from "three"
+        import { OrbitControls } from "three/addons/controls/OrbitControls.js"
+        import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
+
+        class UVTest {
+            constructor() {
+                this.GLTFLoader = new GLTFLoader()
+                this.initialSetup()
+                this.test()
+                this.renderer.setAnimationLoop(this.animate.bind(this))
+                this.clock = new THREE.Clock()
+            }
+
+            async test() {
+                // const boxG = new THREE.BoxGeometry(1, 1, 1)
+                // const boxM = new THREE.MeshStandardMaterial({ color: 0x737BD2 })
+                // this.box = new THREE.Mesh(boxG, boxM)
+                // this.scene.add(this.box)
+
+                // const gltf = await this.GLTFLoader.loadAsync("./assets/Mobile.glb")
+                // const screenMesh = gltf.scene.getObjectByName("Screen")
+                // screenMesh.material = new THREE.MeshStandardMaterial({
+                //     map: texture,
+                //     toneMapped: true,
+                //     metalness: 0,
+                //     roughness: 1,
+                //     side: THREE.FrontSide
+                // });
+                // texture.flipY = false
+                // texture.needsUpdate = true
+                // screenMesh.material.needsUpdate = true;
+                // this.scene.add(gltf.scene)
+
+
+                const newBoxG = new THREE.BoxGeometry(1, 2, 2)
+                const newBoxM = new THREE.MeshBasicMaterial()
+                newBoxM.color = new THREE.Color("blue")
+                this.newBox = new THREE.Mesh(newBoxG, newBoxM)
+                this.scene.add(this.newBox)
+                document.addEventListener("mousemove", handleMouseMove.bind(this))
+                const raycaster = new THREE.Raycaster()
+
+                function handleMouseMove(e) {
+                    // Another way
+                    // const mouseX = ((window.innerWidth / 2) - event.clientX) / 100 // ((center width) - mouseX) <- get distance from center | divided by 100 to make it slower
+                    // const mouseY = ((window.innerHeight / 2) - event.clientY) / 100
+                    // this.camera.position.x += (mouseX - this.camera.position.x) * 0.5 // (distance from center - camera current position to move in the same direction and multiplied by 0.5 to slow it)
+                    // this.camera.position.y += (-mouseY - this.camera.position.y) * 0.5
+                    
+                    const mouse = new THREE.Vector2()
+                    mouse.y = -((e.clientY / this.renderer.domElement.clientHeight) * 2 - 1)
+                    mouse.x = (e.clientX / this.renderer.domElement.clientWidth) * 2 - 1
+
+                    this.camera.position.x = mouse.x * 1.5
+                    this.camera.position.y = mouse.y * 1.5
+
+
+                    // console.log(this.camera.position.x, mouseX - this.camera.position.x)
+                    // this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+                    // raycaster.setFromCamera(mouse, this.camera)
+                    // const intersection = raycaster.intersectObject(this.newBox, false)
+
+                    // if (intersection.length > 0) {
+                    //     const point = intersection[0].point // Coordinate in the Box
+
+                    // }
+                }
+            }
+
+            animate() {
+                const time = this.clock.getElapsedTime()
+                if (this?.controls) this.controls.update()
+
+                // this.box.position.y = Math.cos(time) * 0.1;
+                // console.log(time)
+
+                this.resize()
+                this.renderer.render(this.scene, this.camera)
+            }
+
+            initialSetup() {
+                // Scene, Renderer, Canvas, Camera, 
+                this.scene = new THREE.Scene()
+
+                this.scene.background = new THREE.Color("gray")
+
+                this.renderer = new THREE.WebGLRenderer()
+                this.renderer.setSize(window.innerWidth, window.innerHeight)
+                this.renderer.setPixelRatio(window.devicePixelRatio)
+                document.body.appendChild(this.renderer.domElement)
+
+                // this.light = new THREE.SpotLight(0xffffff)
+                this.light = new THREE.AmbientLight(0xff0000);
+                this.light.position.set(50, 50, 50);
+                this.scene.add(this.light)
+
+                this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
+                this.camera.position.set(0, 5, 5)
+                this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+
+                this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+            }
+
+            resize() {
+                this.renderer.setSize(window.innerWidth, window.innerHeight)
+                this.camera.aspect = window.innerWidth / window.innerHeight
+                this.camera.updateProjectionMatrix()
+            }
+        }
+
+        const newTest = new UVTest()
+    </script>
+</body>
+
+</html>
