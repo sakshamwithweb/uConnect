@@ -1,13 +1,20 @@
+import { useGSAP } from '@gsap/react'
 import { useFrame, useLoader } from '@react-three/fiber'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import React, { useEffect, useRef } from 'react'
 import { AnimationMixer } from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
+gsap.registerPlugin(useGSAP, ScrollTrigger)
+
 // Encrypt model through Draco in future
-export const MaleCharacter = ({ position, scale, progress }) => {
+export const MaleCharacter = ({ position, scale, progress, segmentRefs, maleRef }) => {
     const glbModel = useLoader(GLTFLoader, '/glbs/Male.glb')
     const mixerRef = useRef()
     const mobileViewAndHandShakingActionRef = useRef()
+    const idleActionRef = useRef()
+    
 
     useEffect(() => {
         if (!glbModel?.scene) return
@@ -17,29 +24,57 @@ export const MaleCharacter = ({ position, scale, progress }) => {
         const mobileViewAndHandShakingClip = glbModel.animations.find((a) => a.name == "mobileViewAndHandShaking")
         mobileViewAndHandShakingActionRef.current = mixerRef.current.clipAction(mobileViewAndHandShakingClip)
 
+        // Idle
+        const idleClip = glbModel.animations.find((a) => a.name == "idle")
+        idleActionRef.current = mixerRef.current.clipAction(idleClip)
+
         mobileViewAndHandShakingActionRef.current.play()
         mobileViewAndHandShakingActionRef.current.paused = true
+        idleActionRef.current.play()
+        idleActionRef.current.paused = true
+        idleActionRef.current.weight = 0
     }, [glbModel])
+
+    useGSAP(() => {
+        // if(segmentRefs.current[3])
+        if (segmentRefs.current[4] && maleRef.current) {
+            gsap.to(maleRef.current.position, {
+                y: -5,
+                scrollTrigger: {
+                    trigger: segmentRefs.current[4],
+                    start: "top center",
+                    end: "bottom center",
+                    scrub: true
+                }
+            })
+        }
+    })
 
     useFrame(() => {
         const mixer = mixerRef.current
         const mobileViewAndHandShakingClip = mobileViewAndHandShakingActionRef.current?.getClip()
+        const idleClip = idleActionRef.current?.getClip()
 
         if (!mixer || !mobileViewAndHandShakingClip) return
 
         const seg2 = progress.current[2]
         const seg3 = progress.current[3]
+        const seg4 = progress.current[4]
 
         const mobileViewAnimDuration = mobileViewAndHandShakingClip.duration * 0.34259259259 // 
         if (seg2 > 0 && seg2 < 1) {
             mobileViewAndHandShakingActionRef.current.time = mobileViewAnimDuration * seg2
         } else if (seg3 > 0 && seg3 < 1) {
             mobileViewAndHandShakingActionRef.current.time = ((mobileViewAndHandShakingClip.duration - mobileViewAnimDuration) * seg3) + mobileViewAnimDuration
+        } else if (seg4 > 0 && seg4 < 1) {
+            // mobileViewAndHandShakingActionRef.current.crossFadeTo(idleActionRef.current, 0.2)
+            mobileViewAndHandShakingActionRef.current.weight = (1 - seg4) // reverse of seg4 (fuck, was debugging for literally 1 hr and got to know, I didn't add .current in mobileViewAndHandShakingActionRef.....ahhhhh)
+            idleActionRef.current.weight = seg4
         }
         mixer.update(0)
     })
 
-    return <primitive position={position} scale={scale} object={glbModel.scene} />
+    return <primitive ref={maleRef} position={position} scale={scale} object={glbModel.scene} />
 }
 
 export const SecondCharacter = ({ position, scale, rotation, progress }) => {

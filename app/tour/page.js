@@ -10,7 +10,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import * as THREE from "three"
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -21,10 +21,12 @@ const page = () => {
   const camera = useRef()
   const progress = useRef()
   const segmentRefs = useRef([])
-  const currentFocus = useRef()
   const mobileRef = useRef()
   const [mobileReady, setMobileReady] = useState(false)
   const [htmlReady, setHtmlReady] = useState(false)
+  const maleRef = useRef()
+
+  // const actions = useMemo(() => [], [])
 
   // IN FUTURE CHANGE THE EFFECT WEIGHT ACCORDING TO CAMERA POSITION(the closer, the less)
   const handlePointMove = (event) => {
@@ -44,7 +46,6 @@ const page = () => {
     if (!mobileRef.current || !segmentRefs.current) return
 
     if (segmentRefs.current[2]) { // 2nd segment(b/w AI and Social Media) (IN FUTURE MAKE IT ALSO IN A OBJECT AND CALL!)
-      currentFocus.current = mobileRef.current
       gsap.to(mobileRef.current?.position, { // Mobile position
         y: -1.2,
         scrollTrigger: {
@@ -76,6 +77,18 @@ const page = () => {
         }
       })
     }
+
+    if (segmentRefs.current[4]) {
+      gsap.to(camera.current.position, {
+        y: -4,
+        scrollTrigger: {
+          trigger: segmentRefs.current[4],
+          start: "top center",
+          end: "bottom center",
+          scrub: true
+        }
+      })
+    }
   }, [mobileReady, htmlReady])
 
 
@@ -86,20 +99,20 @@ const page = () => {
       <div className='fixed top-0 left-0 h-screen w-screen'>
         <Canvas className='' > {/*onPointerMove={handlePointMove}*/}
           <color args={["gray"]} attach={"background"} />
-          <Camera position={[0, 0, 0.25]} currentFocus={currentFocus} camera={camera} />
+          <Camera maleRef={maleRef} progress={progress} position={[0, 0, 0.25]} mobileRef={mobileRef} camera={camera} />
           <raycaster ref={rc} />
           <ambientLight />
 
 
           <Mobile progress={progress} mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
           <group>
-            <MaleCharacter segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
+            <MaleCharacter maleRef={maleRef} segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
             <SecondCharacter progress={progress} rotation={[0, Math.PI, 0]} position={[0.1, -1.7, 0.85]} scale={[0.9, 0.9, 0.9]} />
           </group>
 
-          <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} />
+          {/* <OrbitControls enableDamping enableRotate={false} enablePan={false} enableZoom={false} /> */}
           <axesHelper />
-          {/* <OrbitControls /> */}
+          <OrbitControls />
           <gridHelper />
         </Canvas>
       </div>

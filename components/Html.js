@@ -22,6 +22,9 @@ const Html = ({ segmentRefs, progress, onReady }) => {
             title: "So does Social Media?"
         },
         {
+            height: "50vh"
+        },
+        {
             title: "Meet John"
         }
     ]
