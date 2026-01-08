@@ -5,7 +5,8 @@ import { MaleCharacter, SecondCharacter } from '@/components/Characters'
 import { FadeIn } from '@/components/Fade'
 import Html from '@/components/Html'
 import Mobile from '@/components/Mobile'
-import Segment3Model from '@/components/Segment3Model'
+import TableAndLaptop from '@/components/TableAndLaptop'
+import Test from '@/components/Test'
 import { useGSAP } from '@gsap/react'
 import { Canvas } from '@react-three/fiber'
 import { gsap } from 'gsap'
@@ -21,6 +22,7 @@ const page = () => {
   const progress = useRef()
   const segmentRefs = useRef([])
   const mobileRef = useRef()
+  const tableAndLaptopRef = useRef()
   const [mobileReady, setMobileReady] = useState(false)
   const [htmlReady, setHtmlReady] = useState(false)
   const maleRef = useRef()
@@ -80,9 +82,17 @@ const page = () => {
     ScrollTrigger.create({
       trigger: segmentRefs.current[5],
       start: "top center",
-      end: "bottom bottom",
+      end: "bottom center",
       scrub: true,
       animation: gsap.to(camera.current?.position, { x: 0, z: 3, immediateRender: false })
+    })
+
+    ScrollTrigger.create({
+      trigger: segmentRefs.current[6],
+      start: "top center",
+      end: "bottom bottom",
+      scrub: true,
+      animation: gsap.to(camera.current?.position, { z: 0.1, immediateRender: false, y: -3.7 })
     })
   }, [mobileReady, htmlReady])
 
@@ -94,18 +104,18 @@ const page = () => {
       <div className='fixed top-0 left-0 h-screen w-screen'>
         <Canvas className='' > {/*onPointerMove={handlePointMove}*/}
           <color args={["gray"]} attach={"background"} />
-          <Camera maleRef={maleRef} progress={progress} position={[0, 0, 0.25]} mobileRef={mobileRef} camera={camera} />
+          <Camera tableAndLaptopRef={tableAndLaptopRef} maleRef={maleRef} progress={progress} position={[0, 0, 0.25]} mobileRef={mobileRef} camera={camera} />
           <raycaster ref={rc} />
           <ambientLight />
-
 
           <Mobile progress={progress} mobileRef={mobileRef} onReady={() => setMobileReady(true)} />
           <group>
             <MaleCharacter maleRef={maleRef} segmentRefs={segmentRefs} progress={progress} position={[0, -2.5, -0.5]} scale={[0.90, 0.90, 0.90]} />
             <SecondCharacter progress={progress} rotation={[0, Math.PI, 0]} position={[0.1, -1.7, 0.85]} scale={[0.9, 0.9, 0.9]} />
           </group>
+          {/* <Test pos={[0, tableAndLaptopRef.current?.position.y + 1.1, 0.4]} /> */}
 
-          <Segment3Model />
+          <TableAndLaptop tableAndLaptopRef={tableAndLaptopRef} />
           <gridHelper />
         </Canvas>
       </div>

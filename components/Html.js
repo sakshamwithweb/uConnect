@@ -12,7 +12,8 @@ const Html = ({ segmentRefs, progress, onReady }) => {
         { height: "200vh", type: "gap" },
         { title: "So does Social Media?", type: "heading", fade: true, pin: true },
         { height: "50vh", type: "gap" },
-        { title: "Meet John", type: "heading" }
+        { title: "Meet John", type: "heading" },
+        { title: "He is a Programmer", type: "heading" }
     ], [])
 
     if (!progress.current) progress.current = segments.map(() => 0) // arr of 0s

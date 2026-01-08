@@ -6,7 +6,7 @@ import * as THREE from "three"
 
 const Mobile = ({ mobileRef, onReady, progress }) => {
     const gltf = useLoader(GLTFLoader, "/glbs/Mobile.glb")
-    const texture = useVideoTexture("/input.mp4")
+    const texture = useVideoTexture("/media/input.mp4")
     const mixerRef = useRef()
     const mobileHoldActionRef = useRef()
 
