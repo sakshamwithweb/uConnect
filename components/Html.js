@@ -18,7 +18,7 @@ const Html = ({ segmentRefs, progress, onReady }) => {
         { title: "He thinks his idea is revolutionary!", type: "heading" },
         { title: "But his dev friends don't", type: "heading" },
         { title: "So he started traveling", type: "heading" },
-        { title: "through different networking site, social media site" },
+        { title: "through different networking site, social media site", type: "heading" },
         { title: "With the hope he finds like minded people", type: "heading" },
         { title: "What if we can convert the hope to something better?", type: "heading" }
     ], [])
