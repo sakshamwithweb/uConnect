@@ -6,7 +6,6 @@ import { FadeIn } from '@/components/Fade'
 import Html from '@/components/Html'
 import Mobile from '@/components/Mobile'
 import TableAndLaptop from '@/components/TableAndLaptop'
-import Test from '@/components/Test'
 import { useGSAP } from '@gsap/react'
 import { Canvas } from '@react-three/fiber'
 import { gsap } from 'gsap'
@@ -99,7 +98,6 @@ const page = () => {
       trigger: segmentRefs.current[10],
       start: "top center",
       end: "bottom bottom",
-      markers: true,
       scrub: true,
       animation: gsap.to(camera.current?.position, { z: 0, x: 4, immediateRender: false })
     })
@@ -107,7 +105,6 @@ const page = () => {
       trigger: segmentRefs.current[10],
       start: "top top",
       end: "bottom center",
-      markers: true,
       scrub: true,
       animation: gsap.to(camera.current?.position, { x: -1, z: -0.5, immediateRender: false })
     })

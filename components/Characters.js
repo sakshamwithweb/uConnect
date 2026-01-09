@@ -50,7 +50,6 @@ export const MaleCharacter = ({ position, scale, progress, segmentRefs, maleRef 
             trigger: segmentRefs.current[10],
             start: "top top",
             end: "bottom center",
-            markers: true,
             scrub: true,
             animation: gsap.to(maleRef.current?.rotation, { x: Math.PI / 2, z: Math.PI / 2 })
         })
@@ -58,7 +57,6 @@ export const MaleCharacter = ({ position, scale, progress, segmentRefs, maleRef 
             trigger: segmentRefs.current[10],
             start: "top top",
             end: "bottom center",
-            markers: true,
             scrub: true,
             animation: gsap.to(maleRef.current?.position, { x: -2 })
         })
@@ -92,7 +90,7 @@ export const MaleCharacter = ({ position, scale, progress, segmentRefs, maleRef 
 }
 
 export const SecondCharacter = ({ position, scale, rotation, progress }) => {
-    const model = useLoader(GLTFLoader, "/glbs/Character2.glb")
+    const model = useLoader(GLTFLoader, "/glbs/female.glb")
     const mixerRef = useRef()
     const handshakeActionRef = useRef()
 
