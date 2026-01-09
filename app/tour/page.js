@@ -90,9 +90,26 @@ const page = () => {
     ScrollTrigger.create({
       trigger: segmentRefs.current[6],
       start: "top center",
-      end: "bottom bottom",
+      end: "bottom center",
       scrub: true,
       animation: gsap.to(camera.current?.position, { z: 0.1, immediateRender: false, y: -3.7 })
+    })
+
+    ScrollTrigger.create({
+      trigger: segmentRefs.current[10],
+      start: "top center",
+      end: "bottom bottom",
+      markers: true,
+      scrub: true,
+      animation: gsap.to(camera.current?.position, { z: 0, x: 4, immediateRender: false })
+    })
+    ScrollTrigger.create({
+      trigger: segmentRefs.current[10],
+      start: "top top",
+      end: "bottom center",
+      markers: true,
+      scrub: true,
+      animation: gsap.to(camera.current?.position, { x: -1, z: -0.5, immediateRender: false })
     })
   }, [mobileReady, htmlReady])
 

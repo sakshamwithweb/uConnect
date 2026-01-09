@@ -14,7 +14,6 @@ export const MaleCharacter = ({ position, scale, progress, segmentRefs, maleRef 
     const mixerRef = useRef()
     const mobileViewAndHandShakingActionRef = useRef()
     const idleActionRef = useRef()
-    
 
     useEffect(() => {
         if (!glbModel?.scene) return
@@ -36,18 +35,33 @@ export const MaleCharacter = ({ position, scale, progress, segmentRefs, maleRef 
     }, [glbModel])
 
     useGSAP(() => {
-        // if(segmentRefs.current[3])
-        if (segmentRefs.current[4] && maleRef.current) {
-            gsap.to(maleRef.current.position, {
-                y: -5,
-                scrollTrigger: {
-                    trigger: segmentRefs.current[4],
-                    start: "top center",
-                    end: "bottom center",
-                    scrub: true
-                }
-            })
-        }
+        ScrollTrigger.create({
+            trigger: segmentRefs.current[4],
+            start: "top center",
+            end: "bottom center",
+            scrub: true,
+            animation: gsap.to(maleRef.current?.position, { y: -5, immediateRender: false })
+        })
+
+        // 1.55 5.91 1.55
+        console.log()
+
+        ScrollTrigger.create({
+            trigger: segmentRefs.current[10],
+            start: "top top",
+            end: "bottom center",
+            markers: true,
+            scrub: true,
+            animation: gsap.to(maleRef.current?.rotation, { x: Math.PI / 2, z: Math.PI / 2 })
+        })
+        ScrollTrigger.create({
+            trigger: segmentRefs.current[10],
+            start: "top top",
+            end: "bottom center",
+            markers: true,
+            scrub: true,
+            animation: gsap.to(maleRef.current?.position, { x: -2 })
+        })
     })
 
     useFrame(() => {
