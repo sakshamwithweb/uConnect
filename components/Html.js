@@ -12,8 +12,15 @@ const Html = ({ segmentRefs, progress, onReady }) => {
         { height: "200vh", type: "gap" },
         { title: "So does Social Media?", type: "heading", fade: true, pin: true },
         { height: "50vh", type: "gap" },
-        { title: "Meet John", type: "heading" },
-        { title: "He is a Programmer", type: "heading" }
+        { title: "Meet John", type: "heading" }, // -------------------------
+        { title: "He is a Programmer", type: "heading" },
+        { title: "he is looking for team for new project", type: "heading" },
+        { title: "He thinks his idea is revolutionary!", type: "heading" },
+        { title: "But his dev friends don't", type: "heading" },
+        { title: "So he started traveling", type: "heading" },
+        { title: "through different networking site, social media site" },
+        { title: "With the hope he finds like minded people", type: "heading" },
+        { title: "What if we can convert the hope to something better?", type: "heading" }
     ], [])
 
     if (!progress.current) progress.current = segments.map(() => 0) // arr of 0s

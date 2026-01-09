@@ -115,7 +115,7 @@ const page = () => {
           </group>
           {/* <Test pos={[0, tableAndLaptopRef.current?.position.y + 1.1, 0.4]} /> */}
 
-          <TableAndLaptop tableAndLaptopRef={tableAndLaptopRef} />
+          <TableAndLaptop progress={progress} tableAndLaptopRef={tableAndLaptopRef} />
           <gridHelper />
         </Canvas>
       </div>
