@@ -22,6 +22,7 @@
     "leva": "^0.10.1",
     "lucide-react": "^0.555.0",
     "next": "^15.5.7",
+    "r3f-perf": "^7.2.3",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "tailwind-merge": "^3.4.0",

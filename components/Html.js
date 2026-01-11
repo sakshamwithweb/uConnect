@@ -12,7 +12,7 @@ const Html = ({ segmentRefs, progress, onReady }) => {
         { height: "200vh", type: "gap" },
         { title: "So does Social Media?", type: "heading", fade: true, pin: true },
         { height: "50vh", type: "gap" },
-        { title: "Meet John", type: "heading" }, // -------------------------
+        { title: "Meet John", type: "heading" },
         { title: "He is a Programmer", type: "heading" },
         { title: "he is looking for team for new project", type: "heading" },
         { title: "He thinks his idea is revolutionary!", type: "heading" },
@@ -25,14 +25,13 @@ const Html = ({ segmentRefs, progress, onReady }) => {
 
     if (!progress.current) progress.current = segments.map(() => 0) // arr of 0s
 
-    useGSAP(() => { // For updating progress and triggerRef for sync in with R3F
+    useGSAP(() => {
         let readyCount = 0
         segments.forEach((seg, i) => {
             const triggerRef = segmentRefs.current[i]
             if (!triggerRef) return
             readyCount++
-            if (readyCount == segments.length) onReady()// If it is last..
-
+            if (readyCount == segments.length) onReady() // If it is last..
             // For getting data
             ScrollTrigger.create({
                 trigger: triggerRef,

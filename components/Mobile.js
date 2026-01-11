@@ -10,6 +10,9 @@ const Mobile = ({ mobileRef, onReady, progress }) => {
     const mixerRef = useRef()
     const mobileHoldActionRef = useRef()
 
+    const seg = (idx) => progress.current[idx]
+    const isBetween = (val, min, max) => val > min && val < max
+
     useEffect(() => {
         const screenMesh = gltf.scene.getObjectByName("Screen")
         screenMesh.material = new THREE.MeshStandardMaterial({
@@ -35,24 +38,16 @@ const Mobile = ({ mobileRef, onReady, progress }) => {
     }, [])
 
     useFrame(({ clock }) => {
-        // Floating effect
-        const seg0 = progress.current[0] // Gap
-        const seg1 = progress.current[1] // AI text
-        const seg3 = progress.current[3] // Social Media Text
-
-        if ((seg0 >= 0 && seg0 < 1) || (seg1 > 0 && seg1 < 1)) { // ONly in seg 0 and seg 1 || seg0 can also be 0 as it is first segment so will always be 0 default
+        if (isBetween(seg(0), 0, 1) || isBetween(seg(1), 0, 1)) {
+            // Floating effect
             const time = clock.getElapsedTime();
-            if (gltf.scene) {
-                const model = gltf.scene
-                // eslint-disable-next-line react-hooks/immutability
-                model.position.y = Math.sin(time) * 0.01 // For future: {https://gsap.com/community/forums/topic/44834-how-to-use-gsap-scrolltrigger-or-timeline-with-floating-threejs-models/}
-            }
-        } else if (seg3 > 0 && seg3 < 1) {
+            if (gltf.scene) mobileRef.current.position.y = Math.sin(time) * 0.01
+        } else if (isBetween(seg(3), 0, 1)) {
             // call mobile animation to simulate as the Male Character is holding mobile
             const action = mobileHoldActionRef.current
             if (!action) return
             const clip = action.getClip()
-            action.time = clip.duration * seg3
+            action.time = clip.duration * seg(3)
         }
         mixerRef.current?.update(0)
     })

@@ -11,6 +11,9 @@ const TableAndLaptop = ({ tableAndLaptopRef, progress }) => {
     const discordTexture = useTexture("/media/discord.png", (t) => t.name == "discord")
     const discordMsgTextures = useTexture(["/media/discord_msg/1.png", "/media/discord_msg/2.png", "/media/discord_msg/3.png", "/media/discord_msg/4.png"], (t) => t.map((v, i) => v.name = `${i + 1}`))
 
+    const seg = (idx) => progress.current[idx]
+    const isBetween = (val, min, max) => val > min && val < max
+
     const checkAndApplyTexture = (screen, name, newTexture) => {
         if (screen.material?.map?.name != name) {
             screen.material = new MeshStandardMaterial({
@@ -25,20 +28,15 @@ const TableAndLaptop = ({ tableAndLaptopRef, progress }) => {
         const screen = glbModel.scene.getObjectByName("Screen")
         if (!screen) return
 
-        const seg6 = progress.current[6]
-        const seg7 = progress.current[7]
-        const seg8 = progress.current[8]
-        const seg9 = progress.current[9]
-
-        if (seg6 > 0 && seg6 < 1) {
+        if (isBetween(seg(6), 0, 1)) {
             checkAndApplyTexture(screen, "ide", ideTexture)
-        } else if (seg7 > 0 && seg7 < 1) {
+        } else if (isBetween(seg(7), 0, 1)) {
             checkAndApplyTexture(screen, "discord", discordTexture)
-        } else if (seg8 > 0 && seg8 < 1) {
-            if (seg8 < 0.5) checkAndApplyTexture(screen, "1", discordMsgTextures[0])
+        } else if (isBetween(seg(8), 0, 1)) {
+            if (isBetween(seg(8), 0, 0.5)) checkAndApplyTexture(screen, "1", discordMsgTextures[0])
             else checkAndApplyTexture(screen, "2", discordMsgTextures[1])
-        } else if (seg9 > 0 && seg9 < 1) {
-            if (seg9 < 0.5) checkAndApplyTexture(screen, "3", discordMsgTextures[2])
+        } else if (isBetween(seg(9), 0, 1)) {
+            if (isBetween(seg(9), 0, 0.5)) checkAndApplyTexture(screen, "3", discordMsgTextures[2])
             else checkAndApplyTexture(screen, "4", discordMsgTextures[3])
         }
     })
