@@ -1,7 +1,10 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import React, { useMemo } from 'react'
+import React, { Fragment, useMemo } from 'react'
+import { Button } from './ui/button'
+import { MoveRight } from 'lucide-react'
+import Link from 'next/link'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -60,7 +63,19 @@ const Html = ({ segmentRefs, progress, onReady }) => {
         <div className='flex overflow-x-hidden flex-col relative z-10 pointer-events-none'>
             {segments.map((segment, i) => {
                 if (segment.type == "heading") {
-                    return <div className='h-screen flex justify-center items-center text-5xl font-semibold' key={i} ref={(el) => segmentRefs.current[i] = el}>{segment.title}</div>
+                    if (i == segments.length - 1) {
+                        // Last segment(heading) must have Get Started Btn
+                        return (
+                            <div ref={(el) => segmentRefs.current[i] = el} key={i} className='h-screen flex flex-col justify-center items-center text-5xl font-semibold gap-4'>
+                                <div>{segment.title}</div>
+                                <Link className="pointer-events-auto" href={"/guest/login"}>
+                                    <Button>Get Started <MoveRight /></Button>
+                                </Link>
+                            </div>
+                        )
+                    } else {
+                        return <div key={i} className='h-screen flex justify-center items-center text-5xl font-semibold' ref={(el) => segmentRefs.current[i] = el}>{segment.title}</div>
+                    }
                 } else if (segment.type == "gap") {
                     return <div style={{ height: segment.height }} key={i} ref={(el) => segmentRefs.current[i] = el}></div>
                 } else {
