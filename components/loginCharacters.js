@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/refs */
 import { useFrame, useThree } from '@react-three/fiber'
-import React, { useMemo, useRef } from 'react'
-import { Vector3 } from 'three'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { DoubleSide, Vector3 } from 'three'
 
-const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
+const LoginCharacters = ({ pointer, raycasterRef, plane, event }) => {
     // first will have least renderOrder and last will have highest render prder everywhere as r3f does that
     const characterRefs = useRef([])
     const characters = useMemo(() => [
@@ -36,6 +36,12 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
                 {
                     name: "eyes",
                     properties: { position: [0, 1.5, 0] },
+                    interaction: {
+                        hover: {
+                            yPos: 1.5,
+                            offset: { x: 0.09, y: 0.05 }
+                        }
+                    },
                     type: "group",
                     children: [
                         {
@@ -79,6 +85,12 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
                         {
                             name: "pupils",
                             type: "group",
+                            interaction: {
+                                hover: {
+                                    yPos: 0,
+                                    offset: { x: 0.01, y: 0.01 }
+                                }
+                            },
                             children: [
                                 {
                                     type: "mesh",
@@ -119,6 +131,12 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
                 {
                     name: "lips",
                     type: "group",
+                    interaction: {
+                        hover: {
+                            yPos: 1,
+                            offset: { x: 0.09, y: 0.05 }
+                        }
+                    },
                     properties: { position: [0, 1.2, 0], scale: [0.1, 0.01, 0.01] },
                     children: [
                         {
@@ -169,6 +187,12 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
                     name: "eyes",
                     properties: { position: [0, 0.9, 0] },
                     type: "group",
+                    interaction: {
+                        hover: {
+                            yPos: 1,
+                            offset: { x: 0.03, y: 0.03 }
+                        }
+                    },
                     children: [
                         {
                             type: "group",
@@ -211,6 +235,12 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
                         {
                             type: "group",
                             name: "pupils",
+                            interaction: {
+                                hover: {
+                                    yPos: 0,
+                                    offset: { x: 0.015, y: 0.015 }
+                                }
+                            },
                             children: [
                                 {
                                     name: "left",
@@ -280,6 +310,12 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
                     name: "eyes",
                     type: "group",
                     properties: { position: [0, 0.7, 0] },
+                    interaction: {
+                        hover: {
+                            yPos: 1,
+                            offset: { x: 0.09, y: 0.05 }
+                        }
+                    },
                     children: [
                         {
                             type: "mesh",
@@ -313,18 +349,48 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
                     name: "lips",
                     type: "group",
                     properties: { position: [0, 0.5, 0], scale: [0.08, 0.08, 0.01] },
+                    interaction: {
+                        hover: {
+                            yPos: 0.5,
+                            offset: { x: 0.09, y: 0.05 }
+                        },
+                        face: {
+                            happy: (obj) => obj.children[0].material.uniforms.uTheta.value = Math.PI,
+                            curious: (obj) => obj.children[0].material.uniforms.uTheta.value = Math.PI * 2,
+                        }
+                    },
                     children: [
                         {
                             type: "mesh",
                             children: [
                                 {
                                     type: "geometry",
-                                    value: "circleGeometry"
+                                    value: "circleGeometry",
+                                    properties: { args: [1.5] },
                                 },
                                 {
                                     type: "material",
-                                    value: "meshBasicMaterial",
-                                    properties: { color: "black" }
+                                    value: "shaderMaterial",
+                                    properties: {
+                                        color: "black",
+                                        uniforms: { uTheta: { value: Math.PI } }, // change this value to change circle
+                                        vertexShader: `varying vec2 vUv;
+                                            void main() {
+                                            vUv = uv;
+                                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                                          }`,
+                                        fragmentShader: `uniform float uTheta;
+                                          varying vec2 vUv;
+
+                                          void main() {
+                                            vec2 p = vUv - 0.5;
+                                            float angle = atan(p.y, p.x) + 3.1415926;
+
+                                            if (angle > uTheta) discard;
+
+                                            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+                                          }`
+                                    }
                                 }
                             ]
                         }
@@ -346,49 +412,49 @@ const LoginCharacters = ({ pointer, raycasterRef, plane }) => {
             return <Value key={key} {...properties} {...(type == "material" && { depthTest: false })} />
         }
     }
+
+    const doHaveThis = (arr, key, putInArr) => {
+        arr.forEach((c) => {
+            if (c[key]) putInArr.push(c)
+            if (c["children"]) doHaveThis(c["children"], key, putInArr)
+        })
+    }
+
     const mouseWorld = new Vector3(0, 0, 0)
 
     const { camera } = useThree()
 
-    useFrame((_, dt) => {
+    useFrame((s, dt) => {
         if (characterRefs.current.length == 0) return
-        raycasterRef.current.setFromCamera(pointer, camera)
+        raycasterRef.current.setFromCamera(pointer.current, camera)
         raycasterRef.current.ray.intersectPlane(plane, mouseWorld)
-        // console.log(mouseWorld)
-        characterRefs.current.forEach((char, idx) => {
-            const eyes = char.getObjectByName("eyes")
-            const lips = char.getObjectByName("lips")
-            const pupils = char.getObjectByName("pupils")
-
-            if (eyes) {
-                const eyesWorldPose = new Vector3()
-                eyes.getWorldPosition(eyesWorldPose)
-                const eyeDirection = new Vector3().subVectors(mouseWorld, eyesWorldPose)
-                const eyeLocalDir = eyeDirection.clone()
-                eyes.parent.worldToLocal(eyeLocalDir.add(eyesWorldPose))
-                eyes.position.x = eyeLocalDir.x * 0.09
-                eyes.position.y = eyeLocalDir.y * 0.05 + 1.5
-            }
-
-            if (lips) {
-                const lipsWorldPose = new Vector3()
-                lips.getWorldPosition(lipsWorldPose)
-                const lipsDirection = new Vector3().subVectors(mouseWorld, lipsWorldPose)
-                const lipsLocalDir = lipsDirection.clone()
-                lips.parent.worldToLocal(lipsLocalDir.add(lipsWorldPose))
-                lips.position.x = lipsLocalDir.x * 0.09
-                lips.position.y = (lipsLocalDir.y * 0.05) + 0.5
-            }
-
-            if (pupils) {
-                const pupilsWorldPose = new Vector3()
-                pupils.getWorldPosition(pupilsWorldPose)
-                const pupilsDirection = new Vector3().subVectors(mouseWorld, pupilsWorldPose)
-                const pupilsLocalDir = pupilsDirection.clone()
-                pupils.parent.worldToLocal(pupilsLocalDir.add(pupilsWorldPose))
-                pupils.position.x = pupilsLocalDir.x * 0.01
-                pupils.position.y = (pupilsLocalDir.y * 0.01)
-            }
+        characterRefs.current.forEach((char) => {
+            let interactions = []
+            doHaveThis(characters.find((c) => c.name == char.name).children, "interaction", interactions)
+            interactions.forEach((interactObj, idx) => {
+                const obj = char.getObjectByName(interactObj.name)
+                if (obj) {
+                    const { hover, face } = interactObj.interaction
+                    if (hover) {
+                        const objWorldPose = new Vector3()
+                        obj.getWorldPosition(objWorldPose)
+                        const objDirection = new Vector3().subVectors(mouseWorld, objWorldPose)
+                        const objLocalDir = objDirection.clone()
+                        obj.parent.worldToLocal(objLocalDir.add(objWorldPose))
+                        obj.position.x = objLocalDir.x * hover.offset.x
+                        obj.position.y = objLocalDir.y * hover.offset.y + hover.yPos
+                    }
+                    if (face) {
+                        // obj.children[0].material.uniforms.uTheta.value = Math.PI * (2 - n)
+                        if (face.happy) {
+                            const t = s.clock.getElapsedTime()
+                            if (t < 0.5) {
+                                obj.children[0].material.uniforms.uTheta.value = Math.PI * (2 - (t*2))
+                            }
+                        }
+                    }
+                }
+            })
         })
     })
 
