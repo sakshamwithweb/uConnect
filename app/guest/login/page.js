@@ -29,6 +29,7 @@ const Login = () => {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (showPswrd) setEvent("showPassword")
   }, [showPswrd])
 
@@ -82,7 +83,7 @@ const Login = () => {
             </Button>
           </form>
         </div>
-        <div>Don't have an account? <Link href={"/guest/signup"} className='font-semibold'>Sign up</Link></div>
+        <div>Don&apos;t have an account? <Link href={"/guest/signup"} className='font-semibold'>Sign up</Link></div>
       </div>
     </div>
   )
