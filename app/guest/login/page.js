@@ -41,7 +41,7 @@ const Login = () => {
     <div onMouseMove={handleMouseMove} className='flex min-h-screen'>
       <div className='w-[40%]'>
         <Canvas>
-          <LoginCharacters event={event} pointer={pointer} raycasterRef={raycasterRef} plane={plane} />
+          <LoginCharacters states={{ event: event }} pointer={pointer} raycasterRef={raycasterRef} plane={plane} />
           <ambientLight />
           <raycaster ref={raycasterRef} />
           <OrthographicCamera ref={cameraRef} args={[-5, 5, 5, -5, 0.1, 100]} zoom={100} position={[0, 0, 10]} makeDefault />
