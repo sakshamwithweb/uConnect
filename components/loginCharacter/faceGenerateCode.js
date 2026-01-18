@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
+
 // lips for roange
 useEffect(() => {
     if (!started) return

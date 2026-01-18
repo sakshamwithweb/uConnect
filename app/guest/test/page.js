@@ -26,13 +26,22 @@ const Test = () => {
             const y = pos.getY(i)
             const z = pos.getZ(i)
             const h = Math.sqrt(Math.max(0, r * r - x * x))
-            const newY = h === 0 ? 0 : -((y + h) / (2 * h)) * h
-            semiPositions.push(x, newY, z)
+            const tilt = 0.5
+
+            const newX = h === 0 ? 0 : -((y + h) / (2 * h)) * h + tilt * (x / r) * h
+            semiPositions.push(newX, y, z)
         }
 
         geometry.morphAttributes.position[0] = new Float32BufferAttribute(semiPositions, 3)
+        console.log(semiPositions)
         mesh.morphTargetInfluences = []
-        // mesh.morphTargetInfluences[0] = 1
+        const a = async () => {
+            const { GUI } = await import("dat.gui")
+            const gui = new GUI()
+            const obj = { morph: 0 }
+            gui.add(obj, "morph", -2, 2, 0.1).onChange((v) => mesh.morphTargetInfluences[0] = v) // -0.2
+        }
+        a()
 
     }, [started])
 
