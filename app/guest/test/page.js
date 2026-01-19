@@ -29,7 +29,7 @@ const Test = () => {
             const tilt = 0.5
 
             const newX = h === 0 ? 0 : -((y + h) / (2 * h)) * h + tilt * (x / r) * h
-            semiPositions.push(newX, y, z)
+            semiPositions.push(-newX, y, z)
         }
 
         geometry.morphAttributes.position[0] = new Float32BufferAttribute(semiPositions, 3)
