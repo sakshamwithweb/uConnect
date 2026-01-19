@@ -116,18 +116,15 @@ export const charactersData = [
                     ]
                 },
                 interaction: {
-                    custom: {
+                    customs: [{
                         trigger: {
                             type: "state",
                             state: "event",
                             value: "emailInput"
                         },
-                        action: {
-                            target: "children[0].morphTargetInfluences[0]",
-                            value: -0.2
-                        },
-                        interval: 0.2
-                    }
+                        action: (myself, fragment) => myself.children[0].morphTargetInfluences[0] = -0.2 * fragment,
+                        interval: 0.1
+                    }]
                 },
                 children: [
                     {
@@ -155,7 +152,49 @@ export const charactersData = [
                     hover: {
                         yPos: 1,
                         offset: { x: 0.09, y: 0.05 }
-                    }
+                    },
+                    customs: [
+                        {
+                            trigger: {
+                                type: "state",
+                                state: "event",
+                                value: "emailInput"
+                            },
+                            action: (myself, fragment) => {
+                                myself.children[0].position.x += fragment * 0.15
+                                myself.children[1].position.x += fragment * 0.15
+                            },
+                            interval: 0.1
+                        },
+                        {
+                            trigger: {
+                                type: "state",
+                                state: "event",
+                                value: "emailInput"
+                            },
+                            action: (myself, fragment) => {
+                                if (fragment > 0.5) {
+                                    if (!myself.nodded?.email) myself.nodded = { email: true }
+                                    else myself.position.y += fragment / 40
+                                }
+                            },
+                            interval: 1
+                        },
+                        {
+                            trigger: {
+                                type: "state",
+                                state: "event",
+                                value: "emailInput"
+                            },
+                            action: (myself, fragment) => {
+                                if (fragment > 0.5 && fragment < 0.7) {
+                                    if (!myself.nodded?.email[1]) myself.nodded = { email: [true, true] }
+                                    else myself.position.y += fragment / 40
+                                }
+                            },
+                            interval: 3
+                        }
+                    ]
                 },
                 children: [
                     {
@@ -301,7 +340,51 @@ export const charactersData = [
                     hover: {
                         yPos: 0.5,
                         offset: { x: 0.09, y: 0.05 }
-                    }
+                    },
+                    customs: [
+                        {
+                            trigger: {
+                                type: "state",
+                                state: "event",
+                                value: "emailInput"
+                            },
+                            action: (myself, fragment) => {
+                                myself.children[0].morphTargetInfluences[0] -= fragment / 3
+                                myself.children[0].position.x += fragment * 1.8
+                                myself.children[0].scale.x -= 0.05
+                                myself.children[0].scale.y -= 0.05
+                            },
+                            interval: 0.1
+                        },
+                        {
+                            trigger: {
+                                type: "state",
+                                state: "event",
+                                value: "emailInput"
+                            },
+                            action: (myself, fragment) => {
+                                if (fragment > 0.5) {
+                                    if (!myself.nodded?.email[0]) myself.nodded = { email: [true, false] }
+                                    else myself.position.y += fragment / 40
+                                }
+                            },
+                            interval: 1
+                        },
+                        {
+                            trigger: {
+                                type: "state",
+                                state: "event",
+                                value: "emailInput"
+                            },
+                            action: (myself, fragment) => {
+                                if (fragment > 0.5 && fragment < 0.7) {
+                                    if (!myself.nodded?.email[1]) myself.nodded = { email: [true, true] }
+                                    else myself.position.y += fragment / 40
+                                }
+                            },
+                            interval: 3
+                        }
+                    ]
                 },
                 children: [
                     {

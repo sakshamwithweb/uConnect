@@ -81,7 +81,7 @@ const LoginCharacters = ({ pointer, raycasterRef, plane, states }) => {
             interactions.forEach((interactObj) => {
                 const obj = char.getObjectByName(interactObj.name)
                 if (obj) {
-                    const { hover, custom } = interactObj.interaction
+                    const { hover, customs } = interactObj.interaction
                     if (hover) {
                         const objWorldPose = new Vector3()
                         obj.getWorldPosition(objWorldPose)
@@ -91,34 +91,22 @@ const LoginCharacters = ({ pointer, raycasterRef, plane, states }) => {
                         const x = objLocalDir.x * hover.offset.x
                         const y = objLocalDir.y * hover.offset.y + hover.yPos
                         obj.position.lerp(new Vector3(x, y, objLocalDir.z), 0.1)
-                    } else if (custom) {
-                        const { trigger, action, interval } = custom
-                        if (trigger.type == "state") {
-                            const condition = states[trigger.state] == trigger.value
-                            if (condition) {
-                                if (!elapsedTimeRef.current[states[trigger.state]]) {
-                                    elapsedTimeRef.current[states[trigger.state]] = elapsedTime
-                                } else {
-                                    const ourInterval = elapsedTime - elapsedTimeRef.current[states[trigger.state]]
-                                    if (ourInterval < interval) {
-                                        const getValue = (initParent, splittedArr) => {
-                                            let value = initParent
-                                            splittedArr.forEach((val) => {
-                                                if (val.includes("[")) { // its an index
-                                                    const n = parseInt(val.slice(1, val.length - 1))
-                                                    value = value[n]
-                                                } else { // its property
-                                                    value = value[val]
-                                                }
-                                            })
-                                            return value
-                                        }
-
-                                        getValue(obj, action.target.match(/[^[.\]]+|\[\d+\]/g))
+                    }
+                    if (customs) {
+                        customs.forEach((custom) => {
+                            const { trigger, action, interval } = custom
+                            if (trigger.type == "state") {
+                                const condition = states[trigger.state] == trigger.value
+                                if (condition) {
+                                    if (!elapsedTimeRef.current[states[trigger.state]]) {
+                                        elapsedTimeRef.current[states[trigger.state]] = elapsedTime
+                                    } else {
+                                        const ourInterval = elapsedTime - elapsedTimeRef.current[states[trigger.state]]
+                                        if (ourInterval < interval) action(obj, ourInterval / interval)
                                     }
                                 }
                             }
-                        }
+                        })
                     }
                 }
             })
@@ -138,30 +126,6 @@ const LoginCharacters = ({ pointer, raycasterRef, plane, states }) => {
             const mesh = lips.ref.children[0]
             if (mesh?.morphTargetInfluences) mesh.morphTargetInfluences[0] = elapsedTime * 2
         }
-
-        // if (states["event"] == "emailInput") {
-        //     if (!elapsedTimeRef.current[states["event"]]) {
-        //         // console.log("I am new here")
-        //         elapsedTimeRef.current[states["event"]] = elapsedTime
-        //     } else {
-        //         // console.log("old one")
-        //         const interval = elapsedTime - elapsedTimeRef.current[states["event"]]
-        //         if (interval < 0.2) {
-        //             const roangeRef = characterRefs.current.find((c) => c.name == "roange")
-
-        //             let allFaces = []
-        //             doHaveThis(characters.find((c) => c.name == "roange").children, "face", allFaces)
-        //             const body = {
-        //                 property: allFaces.find((a) => a.name == "body"),
-        //                 ref: roangeRef.getObjectByName("body")
-        //             }
-        //             const mesh = body.ref.children[0]
-        //             if (mesh?.morphTargetInfluences) mesh.morphTargetInfluences[0] = - interval // 0 - (-0.2)
-
-        //             // roangeRef.children.find((c) => c.name == "eyes").position.x += interval * 2
-        //         }
-        //     }
-        // }
     })
 
     return <CharacterRender characters={characters} />
