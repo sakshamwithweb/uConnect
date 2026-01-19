@@ -45,7 +45,7 @@ const LoginCharacters = ({ pointer, raycasterRef, plane, states }) => {
         return all
     }, [characters])
 
-    // Setup Morph with 0 influende by default for later use
+    // Setup Morph with 0 influence by default for later use
     useEffect(() => {
         if (characterRefs.current.length === 0) return
 
@@ -78,6 +78,8 @@ const LoginCharacters = ({ pointer, raycasterRef, plane, states }) => {
         raycasterRef.current.ray.intersectPlane(plane, mouseWorld)
         characterRefs.current.forEach((char) => {
             let interactions = allInteractions[char.name]
+            const bodyObj = char.getObjectByName("body")
+            const bodyMesh = bodyObj.children[0]
             interactions.forEach((interactObj) => {
                 const obj = char.getObjectByName(interactObj.name)
                 if (obj) {
@@ -91,6 +93,19 @@ const LoginCharacters = ({ pointer, raycasterRef, plane, states }) => {
                         const x = objLocalDir.x * hover.offset.x
                         const y = objLocalDir.y * hover.offset.y + hover.yPos
                         obj.position.lerp(new Vector3(x, y, objLocalDir.z), 0.1)
+
+                        if (obj.name == "eyes" && bodyMesh?.morphTargetInfluences) {
+                            const normalizedX = Math.max(-1, Math.min(1, objLocalDir.x * 0.3))
+                            if (normalizedX < 0) {
+                                // Stretch left
+                                bodyMesh.morphTargetInfluences[1] = Math.abs(normalizedX) * 0.05
+                                bodyMesh.morphTargetInfluences[2] = 0
+                            } else {
+                                // Stretch right
+                                bodyMesh.morphTargetInfluences[2] = normalizedX * 0.05
+                                bodyMesh.morphTargetInfluences[1] = 0
+                            }
+                        }
                     }
                     if (customs) {
                         customs.forEach((custom) => {
