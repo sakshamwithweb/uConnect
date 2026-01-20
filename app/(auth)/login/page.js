@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/immutability */
 "use client"
-import LoginCharacters from '@/components/loginCharacter/main'
+import LoginCharacters from '@/components/authCharacters/main'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
