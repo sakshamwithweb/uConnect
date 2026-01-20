@@ -1,10 +1,10 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Edges, OrbitControls } from '@react-three/drei'
 import { Stars } from './Stars'
-import { drawThreeGeo, convertToGeoJsonCoords, createGeometryArray } from '../lib/threeGeoJSON'
+import { drawThreeGeo, convertToGeoJsonCoords, createGeometryArray } from '../lib/threejs/threeGeoJSON'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
-import { raycasting } from '@/lib/RayCasting'
+import { raycasting } from '@/lib/threejs/RayCasting'
 
 
 const Tour = ({camera, setFadeOut, redirect }) => {

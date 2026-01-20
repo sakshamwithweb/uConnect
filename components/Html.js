@@ -68,7 +68,7 @@ const Html = ({ segmentRefs, progress, onReady }) => {
                         return (
                             <div ref={(el) => segmentRefs.current[i] = el} key={i} className='h-screen flex flex-col justify-center items-center text-5xl font-semibold gap-4'>
                                 <div>{segment.title}</div>
-                                <Link className="pointer-events-auto" href={"/guest/login"}>
+                                <Link className="pointer-events-auto" href={"/login"}>
                                     <Button>Get Started <MoveRight /></Button>
                                 </Link>
                             </div>
