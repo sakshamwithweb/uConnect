@@ -52,10 +52,10 @@ const Login = () => {
       setError("Password length must be 8 or more than 8")
       return
     } else if (form.username.length <= 2) {
-      setError("Password length must be 3 or more than 3")
+      setError("Username length must be 3 or more than 3")
       return
     }
-
+    setError("")
     const req = await fetch("/api/auth/signup", {
       headers: {
         'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ const Login = () => {
       body: JSON.stringify(form)
     })
     const res = await req.json()
-    if(!res.success) return
+    if (!res.success) return
     alert("Logged in!")
   }
 
@@ -107,6 +107,7 @@ const Login = () => {
                 </div>
               </div>
             </div>
+            <p className='text-red-500 text-center'>{error}</p>
             <Button type="submit" className="rounded-2xl">Sign Up</Button>
           </form>
           <Button variant={"outline"} className="rounded-2xl">
