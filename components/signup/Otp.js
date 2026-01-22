@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   InputOTP,
   InputOTPGroup,
@@ -6,8 +6,37 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { Button } from '../ui/button'
+import { useRouter } from 'next/navigation'
+import { TailSpin } from 'react-loading-icons'
 
-const Otp = ({ setSection, email }) => {
+const Otp = ({ data }) => {
+  const [otp, setOtp] = useState("")
+  const [error, setError] = useState("")
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+
+  const handleCheckOtp = async () => {
+    if (otp.length !== 6) {
+      setError("Otp is incomplete")
+      return
+    }
+    setLoading(true)
+    const req = await fetch("/api/auth/signup/verifyOtpAndSignup", {
+      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      body: JSON.stringify({ otp: otp, otpId: data?.otpId, email: data?.email, username: data?.username, password: data?.password })
+    })
+    const res = await req.json()
+    if (res.success) {
+      router.push("/dashboard")
+      return
+    }
+    setError(res?.error || "Something went wrong")
+    setLoading(false)
+  }
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setLoading(false), [])
 
   return (
     <>
@@ -23,10 +52,10 @@ const Otp = ({ setSection, email }) => {
           <div className='border rounded-xl h-[40vh] my-20 text-center min-w-[30vw] flex flex-col items-center justify-center gap-8'>
             <div>
               <p className='text-3xl font-bold'>Enter OTP</p>
-              <p className='font-semibold text-sm'>OTP sent on <span className='underline'>{"email"}</span></p>
+              <p className='font-semibold text-sm'>OTP sent on <span className='underline'>{data?.email}</span></p>
             </div>
             <div>
-              <InputOTP maxLength={6}>
+              <InputOTP value={otp} onChange={(e) => setOtp(e)} maxLength={6}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
@@ -40,7 +69,10 @@ const Otp = ({ setSection, email }) => {
                 </InputOTPGroup>
               </InputOTP>
             </div>
-            <Button>Submit</Button>
+            <div>
+              <p className='text-red-600 font-semibold'>{error}</p>
+            </div>
+            <Button disabled={loading} onClick={handleCheckOtp}>Submit {loading && <TailSpin />}</Button>
           </div>
         </div>
       </div>

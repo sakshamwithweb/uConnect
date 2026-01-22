@@ -5,8 +5,9 @@ import { Label } from '@radix-ui/react-label';
 import { Input } from '../ui/input';
 import Link from 'next/link';
 import { checkUsernameStatus } from '@/lib/funcs/checkUsername';
+import { TailSpin } from 'react-loading-icons';
 
-const Form = ({ setEvent, showPswrd, setShowPswrd, setSection }) => {
+const Form = ({ setEvent, showPswrd, setShowPswrd, setSection, setData, data }) => {
     const [form, setForm] = useState({
         username: "",
         email: "",
@@ -14,6 +15,9 @@ const Form = ({ setEvent, showPswrd, setShowPswrd, setSection }) => {
     })
     const [username, setUsername] = useState("")
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => setLoading(false), [])
 
     const handleSignup = async (e) => {
         e.preventDefault()
@@ -27,8 +31,9 @@ const Form = ({ setEvent, showPswrd, setShowPswrd, setSection }) => {
             setError("Username length must be 3 or more than 3")
             return
         }
+        setLoading(true)
         setError("")
-        const req = await fetch("/api/auth/signup", {
+        const req = await fetch("/api/auth/signup/checkAndSendOtp", {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -36,13 +41,14 @@ const Form = ({ setEvent, showPswrd, setShowPswrd, setSection }) => {
             body: JSON.stringify(form)
         })
         const res = await req.json()
-        if (!res.success) {
-            const err = res?.error || "Something went wrong"
-            setError(err)
+        if (res.success) {
+            setData({ ...data, otpId: res.otpId, email: form.email, username: form.username, password: form.password })
+            setSection(1)
             return
         }
-        alert("Signed up!")
-        setSection(1)
+        const err = res?.error || "Something went wrong"
+        setError(err)
+        setLoading(false)
     }
 
     const checkUsername = async () => {
@@ -88,7 +94,7 @@ const Form = ({ setEvent, showPswrd, setShowPswrd, setSection }) => {
                         </div>
                     </div>
                     <p className='text-red-500 text-center'>{error}</p>
-                    <Button type="submit" className="rounded-2xl">Sign Up</Button>
+                    <Button disabled={loading} type="submit" className="rounded-2xl">Sign Up {loading && <TailSpin />}</Button>
                 </form>
                 <Button variant={"outline"} className="rounded-2xl">
                     <div>
