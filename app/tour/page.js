@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client"
-import Camera from '@/components/Camera'
-import { MaleCharacter, SecondCharacter } from '@/components/Characters'
+import Camera from '@/components/threejs/Camera'
+import { MaleCharacter, SecondCharacter } from '@/components/threejs/Characters'
 import { FadeIn } from '@/components/Fade'
 import Html from '@/components/Html'
-import Mobile from '@/components/Mobile'
-import TableAndLaptop from '@/components/TableAndLaptop'
+import Mobile from '@/components/threejs/Mobile'
+import TableAndLaptop from '@/components/threejs/TableAndLaptop'
 import { useGSAP } from '@gsap/react'
 import { Canvas } from '@react-three/fiber'
 import { gsap } from 'gsap'
