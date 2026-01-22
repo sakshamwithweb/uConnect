@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useState } from 'react'
-import { Globe } from './Globe'
 import { Button } from './ui/button'
 import { FadeIn, FadeOut } from './Fade'
 import { useRouter } from 'next/navigation'
+import { Globe } from './threejs/Globe'
 
 const Hero = () => {
     const [tour, setTour] = useState(false)

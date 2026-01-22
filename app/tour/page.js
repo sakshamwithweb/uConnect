@@ -3,7 +3,7 @@
 import Camera from '@/components/threejs/Camera'
 import { MaleCharacter, SecondCharacter } from '@/components/threejs/Characters'
 import { FadeIn } from '@/components/Fade'
-import Html from '@/components/Html'
+import Html from '@/components/threejs/Html'
 import Mobile from '@/components/threejs/Mobile'
 import TableAndLaptop from '@/components/threejs/TableAndLaptop'
 import { useGSAP } from '@gsap/react'

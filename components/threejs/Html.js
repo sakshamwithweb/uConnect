@@ -2,7 +2,7 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import React, { Fragment, useMemo } from 'react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 import { MoveRight } from 'lucide-react'
 import Link from 'next/link'
 
