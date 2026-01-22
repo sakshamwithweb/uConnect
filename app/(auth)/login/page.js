@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/immutability */
 "use client"
 import LoginCharacters from '@/components/authCharacters/main'
 import { Button } from '@/components/ui/button'
@@ -8,7 +7,9 @@ import { OrthographicCamera } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
+import { TailSpin } from 'react-loading-icons'
 import * as THREE from "three"
 
 const Login = () => {
@@ -23,6 +24,11 @@ const Login = () => {
   const [showPswrd, setShowPswrd] = useState(false)
   const [event, setEvent] = useState("")
 
+  const [cred, setCred] = useState({ email: "", password: "" })
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+
   const handleMouseMove = ({ clientX, clientY }) => {
     pointer.current.x = (clientX / window.innerWidth) * 2 - 1
     pointer.current.y = -((clientY / window.innerHeight) * 2 - 1)
@@ -36,6 +42,38 @@ const Login = () => {
   useEffect(() => {
     console.log(event)
   }, [event])
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setLoading(false), [])
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    if (!cred.email || !cred.password) {
+      setError("All fields are required")
+      return
+    } else if (cred.password.length <= 7) {
+      setError("Password length must be 8 or more than 8")
+      return
+    }
+    setLoading(true)
+    setError("")
+
+    const req = await fetch("/api/auth/login", {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(cred)
+    })
+    const res = await req.json()
+    if (res.success) {
+      router.push("/dashboard")
+      return
+    }
+    const err = res?.error || "Something went wrong"
+    setError(err)
+    setLoading(false)
+  }
 
   return (
     <div onMouseMove={handleMouseMove} className='flex min-h-screen'>
@@ -58,21 +96,22 @@ const Login = () => {
               <p className='text-sm'>Please enter your details</p>
             </div>
           </div>
-          <form className='flex flex-col gap-4'>
+          <form onSubmit={handleLogin} className='flex flex-col gap-4'>
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input onSelect={() => setEvent("emailInput")} type="email" id="email" placeholdeer="Email" />
+              <Input value={cred.email} onChange={(e) => setCred({ ...cred, email: e.target.value })} onSelect={() => setEvent("emailInput")} type="email" id="email" placeholdeer="Email" />
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
               <div className='relative'>
-                <Input onSelect={() => setEvent("passwordInput")} type={showPswrd ? "text" : "password"} id="password" placeholdeer="Password" />
+                <Input value={cred.password} onChange={(e) => setCred({ ...cred, password: e.target.value })} onSelect={() => setEvent("passwordInput")} type={showPswrd ? "text" : "password"} id="password" placeholdeer="Password" />
                 <div onClick={() => { setShowPswrd(!showPswrd) }} className='absolute p-2.5 cursor-pointer top-0 right-0'>
                   {showPswrd ? <EyeOff size={16} /> : <Eye size={16} />}
                 </div>
               </div>
             </div>
-            <Button className="rounded-2xl">Log In</Button>
+            <p className='text-red-500 text-center'>{error}</p>
+            <Button disabled={loading} className="rounded-2xl">Log In {loading && <TailSpin />}</Button>
           </form>
           <Button variant={"outline"} className="rounded-2xl">
             <div>

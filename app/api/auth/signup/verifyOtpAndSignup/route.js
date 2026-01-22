@@ -4,6 +4,7 @@ import User from "@/lib/schema/user";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose"
 import crypto from "crypto"
+import { signJwtToken } from "@/lib/funcs/jwt";
 
 export async function POST(req) {
     const { otp, otpId, username, email, password } = await req.json()
@@ -18,17 +19,9 @@ export async function POST(req) {
         await newUser.save()
 
         const tokenExpiresIn = "1d"
-
-        const secretKey = crypto.createSecretKey(process.env.JWT_SECRET)
-
-        const authToken = await new SignJWT({ username: username })
-            .setProtectedHeader({ alg: 'HS256' })
-            .setIssuedAt()
-            .setExpirationTime(tokenExpiresIn)
-            .sign(secretKey)
+        const authToken = await signJwtToken({ username: username }, tokenExpiresIn)
 
         const response = NextResponse.json({ success: true })
-
         response.cookies.set('authToken', authToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV == "production",
