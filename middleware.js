@@ -4,7 +4,7 @@ import { verifyAuthToken } from "./lib/funcs/jwt";
 export async function middleware(request) {
     const authToken = request.cookies.get("authToken")?.value
 
-    const protectedRoutes = ["/dashboard"]
+    const protectedRoutes = ["/dashboard", "/profile"]
     const notForAuthorizedRoutes = ["/login", "/signup"]
 
     const isProtectedRoute = protectedRoutes.find((route) => request.nextUrl.pathname.startsWith(route))
