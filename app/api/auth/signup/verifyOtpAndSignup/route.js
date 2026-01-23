@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { SignJWT } from "jose"
 import crypto from "crypto"
 import { signJwtToken } from "@/lib/funcs/jwt";
+import UserInfos from "@/lib/schema/userInfos";
 
 export async function POST(req) {
     const { otp, otpId, username, email, password } = await req.json()
@@ -16,7 +17,9 @@ export async function POST(req) {
 
         const updatedAt = new Date()
         const newUser = new User({ username, email, password, updatedAt })
+        const newUserInfos = new UserInfos({ username })
         await newUser.save()
+        await newUserInfos.save()
 
         const tokenExpiresIn = "1d"
         const authToken = await signJwtToken({ username: username }, tokenExpiresIn)
