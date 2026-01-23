@@ -3,10 +3,23 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Camera } from 'lucide-react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import SelectDataSource from './dialogs/SelectDataSource'
+import ViewScrappedData from './dialogs/ViewScrappedData'
+
+const CurrentDialogComp = ({ Component, props }) => <Component />
 
 const Form = ({ userInfo, setUserInfo }) => {
+    const [currentDialog, setCurrentDialog] = useState("")
+    const dialogs = useMemo(() => {
+        return {
+            "SelectDataSource": SelectDataSource,
+            "ViewScrappedData": ViewScrappedData
+        }
+    }, [])
+
     const handleAvatarUpload = (avatar) => alert("Sorry we are unable to upload the file as we don't have AWS account for s3")
+
     return (
         <div className='w-full min-h-full p-4 flex flex-col gap-12'>
             <div className='profile flex border rounded-xl p-8 justify-between'>
@@ -30,13 +43,14 @@ const Form = ({ userInfo, setUserInfo }) => {
                     <Button>Edit Your Persona</Button>
                 </div>
             </div>
+            {currentDialog && <CurrentDialogComp Component={dialogs[currentDialog]} />}
             <div className='data border rounded-xl p-8 flex flex-col gap-4'>
                 <h1 className="text-2xl font-semibold">Manage your Data</h1>
                 <div className='flex gap-4'>
-                    <Button>
+                    <Button onClick={() => setCurrentDialog("SelectDataSource")}>
                         Select Data Sources
                     </Button>
-                    <Button variant="outline">
+                    <Button variant="outline" onClick={() => setCurrentDialog("ViewScrappedData")}>
                         View Scrapped Data
                     </Button>
                 </div>
