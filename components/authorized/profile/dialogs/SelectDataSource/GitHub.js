@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import { useState } from 'react'
 
 export const GitHub = () => {
     const [username, setUsername] = useState("")
+
     const fetchGithub = async () => {
         const req = await fetch("/api/authorized/githubFetch", {
             headers: {

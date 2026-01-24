@@ -20,25 +20,28 @@ const SelectDataSource = () => {
   const consentRef = useRef()
   const consentTextRef = useRef()
 
-  const sections = useMemo(() => [Primary, GitHub], [])
-  const [section, setSection] = useState(0)
+  const sections = useMemo(() => {
+    return {
+      Primary,
+      GitHub
+    }
+  }, [])
+  const [section, setSection] = useState("Primary")
 
-  const handleGithub = () => {
+  const handleDataSourceClicked = (dataSource) => {
     if (!consentCheck) {
       consentRef.current.style.borderColor = "red"
       consentTextRef.current.style.color = "red"
       return
     }
-    setSection(1)
+    setSection(dataSource)
   }
 
-  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const allDataSources = useMemo(() => [
     {
       name: "GitHub",
       size: 20,
-      icon: SiGithub,
-      action: handleGithub
+      icon: SiGithub
     },
     {
       name: "Twitter",
@@ -77,8 +80,8 @@ const SelectDataSource = () => {
           <DialogTitle className="font-bold text-2xl">Select Data Sources</DialogTitle>
         </DialogHeader>
         <div className='flex flex-col gap-6 h-[30vh]'>
-          <Comp Component={sections[section]} props={{ consentCheck, setConsentCheck, consentRef, consentTextRef, allDataSources }} />
-          {section > 0 && <button className='absolute top-2 left-2 cursor-pointer' onClick={() => setSection(section - 1)}><ArrowLeft className='opacity-45 hover:opacity-100 transition-opacity duration-200' color='black' /></button>}
+          <Comp Component={sections[section]} props={{ consentCheck, handleDataSourceClicked, setConsentCheck, consentRef, consentTextRef, allDataSources }} />
+          {section != "Primary" && <button className='absolute top-2 left-2 cursor-pointer' onClick={() => setSection("Primary")}><ArrowLeft className='opacity-45 hover:opacity-100 transition-opacity duration-200' color='black' /></button>}
         </div>
       </DialogContent>
     </Dialog>
