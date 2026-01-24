@@ -38,4 +38,4 @@ cd uConnect
 npm install
 npm run dev
 ```
-App runs at: http://localhost:3000 by default
+App runs at: http://localhost:3000 by default, don't ask why my friends can't access the link: localhost:3000 ?

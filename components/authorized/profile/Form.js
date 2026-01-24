@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label'
 import { Camera } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
-import SelectDataSource from './dialogs/SelectDataSource'
+import SelectDataSource from './dialogs/SelectDataSource/main'
 import ViewScrappedData from './dialogs/ViewScrappedData'
 
 const Form = ({ userInfo, setUserInfo }) => {
