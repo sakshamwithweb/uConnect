@@ -1,7 +1,6 @@
+import { checkAuthToken } from "@/lib/funcs/checkAuthToken"
 import { connectDB } from "@/lib/funcs/connectDB"
-import { verifyAuthToken } from "@/lib/funcs/jwt"
 import UserInfos from "@/lib/schema/userInfos"
-import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
 export async function POST(req) {
@@ -11,15 +10,12 @@ export async function POST(req) {
 
 export async function GET() {
     try {
-        const cookieStore = await cookies()
-        const authToken = cookieStore.get("authToken")?.value
-        if (!authToken) return NextResponse.json({ success: false, error: "Unauthorized Request" }, { status: 401 })
-        const userDetailsFromJwt = await verifyAuthToken(authToken)
-        if (!userDetailsFromJwt || !userDetailsFromJwt?.payload?.username || !userDetailsFromJwt?.payload?.exp || !userDetailsFromJwt?.payload?.exp > Date.now()) return NextResponse.json({ success: false, error: "Unauthorized Request" }, { status: 401 })
+        const response = await checkAuthToken()
+        if (!response.success) return NextResponse.json({ success: false, error: response.error }, { status: response.status })
 
         await connectDB()
 
-        const userInfos = await UserInfos.findOne({ username: userDetailsFromJwt.payload.username }, "-__v -_id ")
+        const userInfos = await UserInfos.findOne({ username: response.userDetailsFromJwt.payload.username }, "-__v -_id ")
         if (!userInfos) return NextResponse.json({ success: false, error: "User not found" }, { status: 401 })
 
         return NextResponse.json({ success: true, userInfos })

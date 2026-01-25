@@ -80,7 +80,7 @@ const SelectDataSource = () => {
           <DialogTitle className="font-bold text-2xl">Select Data Sources</DialogTitle>
         </DialogHeader>
         <div className='flex flex-col gap-6 h-[30vh]'>
-          <Comp Component={sections[section]} props={{ consentCheck, handleDataSourceClicked, setConsentCheck, consentRef, consentTextRef, allDataSources }} />
+          <Comp Component={sections[section]} props={{ consentCheck, handleDataSourceClicked, setSection, setConsentCheck, consentRef, consentTextRef, allDataSources }} />
           {section != "Primary" && <button className='absolute top-2 left-2 cursor-pointer' onClick={() => setSection("Primary")}><ArrowLeft className='opacity-45 hover:opacity-100 transition-opacity duration-200' color='black' /></button>}
         </div>
       </DialogContent>

@@ -1,19 +1,28 @@
-import { Octokit } from "@octokit/core"
+import { checkAuthToken } from "@/lib/funcs/checkAuthToken"
+import { connectDB } from "@/lib/funcs/connectDB"
+import { githubDataFetch } from "@/lib/funcs/github"
+import UserInfos from "@/lib/schema/userInfos"
 import { NextResponse } from "next/server"
 
 export async function POST(req) {
     try {
-        const { username } = await req.json()
+        const { username: githubUsername } = await req.json()
+        const data = await githubDataFetch(githubUsername)
 
-        const octokit = new Octokit({ auth: process.env.GITHUB_PAT })
+        const response = await checkAuthToken()
+        if (!response.success) return NextResponse.json({ success: false, error: response.error }, { status: response.status })
 
-        const { status, data } = await octokit.request(`GET /users/${username}`)
+        await connectDB()
 
-        if (status != 200) throw new Error("Error")
-
+        await UserInfos.updateOne({
+            username: response.userDetailsFromJwt?.payload?.username, "datas.type": "raw-online"
+        }, {
+            "$push": {
+                "datas.$.data": data
+            }
+        })
         return NextResponse.json({ success: true, data })
     } catch (error) {
-        // console.log(error)
         return NextResponse.json({ success: false, error: "Something went wrong" }, { status: 500 })
     }
 }
