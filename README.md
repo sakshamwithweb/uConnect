@@ -7,7 +7,6 @@ Let us know about you from your data and get matched with like minded people or 
 **link**: https://u-connect-rho.vercel.app
 
 **Current todos**:
-- Easily configure with your data having platform like GitHub, Reddit (public datas only)
 - Extract feature from data.
 - Create a doc like based on that schema that tells abt you in a text way or json.
 - Convert that into Vectors, store in db and match with other and find like minded
