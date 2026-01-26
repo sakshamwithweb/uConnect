@@ -7,13 +7,15 @@ Let us know about you from your data and get matched with like minded people or 
 **link**: https://u-connect-rho.vercel.app
 
 **Current todos**:
-- Extract feature from data.
-- Create a doc like based on that schema that tells abt you in a text way or json.
-- Convert that into Vectors, store in db and match with other and find like minded
+- Match vectors with others' vectors
+
+**MOST TIME TAKEN TASK WAS DEBUGGING FOR THREE.js**
 
 **What I have done**:
-- Learnt three.js and made intro page, tour page and authentication from scratch
-- 
+- Learnt three.js and made intro page, tour page and authentication character from scratch
+- Made authetication system.
+- Importing user's details from username and extract features and generate embedded vectors and store (first time)
+-  
 
 ## Setup
 ### Prerequisites

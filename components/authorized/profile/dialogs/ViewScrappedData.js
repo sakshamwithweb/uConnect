@@ -18,8 +18,7 @@ const ViewScrappedData = () => {
         <DialogHeader>
           <DialogTitle className="font-bold text-2xl">View Scapped Data</DialogTitle>
           <div>
-            This action cannot be undone. This will permanently delete your account
-            and remove your data from our servers.
+            This action cannot be undone. This page is not ready.
           </div>
         </DialogHeader>
       </DialogContent>

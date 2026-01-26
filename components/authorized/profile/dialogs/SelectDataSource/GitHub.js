@@ -24,6 +24,7 @@ export const GitHub = ({ setSection }) => {
         const { success, data, error } = await req.json()
         if (success) {
             console.log(data)
+            alert("Your data has been imported now go to profile section")
             setSection("Primary")
         }
 

@@ -43,31 +43,31 @@ const SelectDataSource = () => {
       size: 20,
       icon: SiGithub
     },
-    {
-      name: "Twitter",
-      size: 20,
-      icon: XIcon
-    },
-    {
-      name: "LinkedIn",
-      size: 20,
-      icon: Linkedin
-    },
-    {
-      name: "Custom",
-      size: 20,
-      icon: Link
-    },
-    {
-      name: "Discord",
-      size: 20,
-      icon: SiDiscord
-    },
-    {
-      name: "Reddit",
-      size: 20,
-      icon: SiReddit
-    }
+    // {
+    //   name: "Twitter",
+    //   size: 20,
+    //   icon: XIcon
+    // },
+    // {
+    //   name: "LinkedIn",
+    //   size: 20,
+    //   icon: Linkedin
+    // },
+    // {
+    //   name: "Custom",
+    //   size: 20,
+    //   icon: Link
+    // },
+    // {
+    //   name: "Discord",
+    //   size: 20,
+    //   icon: SiDiscord
+    // },
+    // {
+    //   name: "Reddit",
+    //   size: 20,
+    //   icon: SiReddit
+    // }
   ], [consentCheck])
 
   return (
