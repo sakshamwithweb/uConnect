@@ -13,6 +13,7 @@ export async function POST(req) {
         if (!response.success) return NextResponse.json({ success: false, error: response.error }, { status: response.status })
 
         const features = await extractFeature(data)
+        console.log(features)
 
         await connectDB()
 

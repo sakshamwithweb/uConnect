@@ -23,6 +23,7 @@ export const GitHub = ({ setSection }) => {
         })
         const { success, data, error } = await req.json()
         if (success) {
+            console.log(data)
             setSection("Primary")
         }
 
