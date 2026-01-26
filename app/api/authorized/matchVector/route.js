@@ -13,8 +13,8 @@ export async function POST() {
         await connectDB()
 
         // Get embedded vector
-        const { embedding } = await UserInfos.findOne({ username })
-        if (!embedding) return NextResponse.json({ success: false, error: "User embeddings not found" }, { status: 409 })
+        const me = await UserInfos.findOne({ username })
+        if (!me?.embedding) return NextResponse.json({ success: false, error: "User embeddings not found" }, { status: 409 })
 
         // Match vector with other's embedded vectors
         const results = await UserInfos.aggregate([
@@ -22,9 +22,9 @@ export async function POST() {
                 $vectorSearch: {
                     index: "vector_index",
                     path: "embedding",
-                    queryVector: embedding,
+                    queryVector: me?.embedding,
                     numCandidates: 200,
-                    limit: 5
+                    limit: 6
                 }
             },
             {
@@ -35,10 +35,15 @@ export async function POST() {
             }
         ])
 
-        console.log(results)
+        const ids = results.map((r) => r._id).splice(1)
 
-        return NextResponse.json({ success: true })
+        const matches = await UserInfos.find({
+            _id: { $in: ids }
+        }, "-embedding").lean()
+
+        return NextResponse.json({ success: true, matches })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ success: false, error: "something went wrong" }, { status: 500 })
     }
 }

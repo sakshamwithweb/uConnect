@@ -21,8 +21,12 @@ const Page = () => {
             body: JSON.stringify()
         })
         const res = await req.json()
-        console.log(res)
+        if (res.success) {
+            setMatches(res.matches)
+            return
+        }
         setLoading(false)
+        alert("Something went wrong, maybe you didn't added github in profile or else try again later")
     }
 
     return (
