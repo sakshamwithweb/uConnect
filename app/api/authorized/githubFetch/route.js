@@ -12,6 +12,8 @@ export async function POST(req) {
         const response = await checkAuthToken()
         if (!response.success) return NextResponse.json({ success: false, error: response.error }, { status: response.status })
 
+        
+
         await connectDB()
 
         await UserInfos.updateOne({
