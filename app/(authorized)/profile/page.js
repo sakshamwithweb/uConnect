@@ -9,7 +9,7 @@ const Page = () => {
     const [userInfo, setUserInfo] = useState({})
 
     const getUserInfos = async () => {
-        const req = await fetch("/api/authorized/userInfos")
+        const req = await fetch("/api/authorized/userInfos?type=self")
         const res = await req.json()
         if (!res?.success || !res?.userInfos) return
         setUserInfo(res?.userInfos)

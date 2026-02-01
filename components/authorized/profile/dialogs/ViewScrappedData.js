@@ -12,11 +12,11 @@ const ViewScrappedData = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>View Scapped Data</Button>
+        <Button>View Scrapped Data</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="font-bold text-2xl">View Scapped Data</DialogTitle>
+          <DialogTitle className="font-bold text-2xl">View Scrapped Data</DialogTitle>
           <div>
             This action cannot be undone. This page is not ready.
           </div>

@@ -2,6 +2,7 @@
 import Navigator from '@/components/authorized/Navigator'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { TailSpin } from 'react-loading-icons'
 
@@ -44,7 +45,7 @@ const Page = () => {
                 {matches.length == 0 ? <p className='text-center'>No Match found</p> : (
                     <div className='flex flex-col items-center gap-4 pb-4'>
                         {matches.map((matchedUser, idx) => {
-                            return <div className='border w-[80%] flex p-4 rounded-xl gap-4' key={idx}>
+                            return <Link href={`/user/${matchedUser.username}`} className='border w-[80%] flex p-4 rounded-xl gap-4' key={idx}>
                                 <div>
                                     <Image alt="userPfp" width={60} height={60} src={matchedUser.pfp} />
                                 </div>
@@ -52,7 +53,7 @@ const Page = () => {
                                     <div className='font-bold'>{matchedUser.username}</div>
                                     <div>{matchedUser.features[0].techStack.primary[0]}</div>
                                 </div>
-                            </div>
+                            </Link>
                         })}
                     </div>
                 )}
